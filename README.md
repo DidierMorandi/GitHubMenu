@@ -5,14 +5,15 @@ GitHubMenu est un menu graphique pour utiliser GitHub CLI (`gh`) sans retenir le
 L'objectif est de parler le langage de l'utilisateur :
 
 1. État GitHub
-2. Publier une nouvelle version
-3. Télécharger une version
-4. Historique des versions
-5. Ouvrir le dépôt GitHub
-6. Voir les workflows
-7. Diagnostic GitHub
-8. Outils avancés
-9. Documentation du Père Claude
+2. Créer le dépôt GitHub à partir du `.git` local
+3. Publier une nouvelle version
+4. Télécharger une version
+5. Historique des versions
+6. Ouvrir le dépôt GitHub
+7. Voir les workflows
+8. Diagnostic GitHub
+9. Outils avancés
+10. Documentation du Père Claude
 
 ## Pré-requis
 
@@ -44,6 +45,7 @@ GitDTL accompagne les opérations Git locales.
 GitHubMenu accompagne les opérations GitHub :
 
 - consulter l'état du dépôt GitHub ;
+- créer le dépôt GitHub distant depuis un dépôt Git local avant le premier push ;
 - publier une Release GitHub ;
 - télécharger une Release ;
 - consulter l'historique des versions ;

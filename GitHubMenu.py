@@ -124,14 +124,15 @@ class GitHubMenuApp:
 
         actions = [
             ("1", "État GitHub", self.show_github_status),
-            ("2", "Publier une nouvelle version", self.publish_release),
-            ("3", "Télécharger une version", self.download_release),
-            ("4", "Historique des versions", self.show_release_history),
-            ("5", "Ouvrir le dépôt GitHub", self.open_github_repository),
-            ("6", "Voir les workflows", self.show_workflows),
-            ("7", "Diagnostic GitHub", self.show_github_diagnostic),
-            ("8", "Outils avancés", self.show_advanced_tools),
-            ("9", "Documentation du Père Claude", self.show_documentation),
+            ("2", "Créer le dépôt GitHub", self.create_github_repository),
+            ("3", "Publier une nouvelle version", self.publish_release),
+            ("4", "Télécharger une version", self.download_release),
+            ("5", "Historique des versions", self.show_release_history),
+            ("6", "Ouvrir le dépôt GitHub", self.open_github_repository),
+            ("7", "Voir les workflows", self.show_workflows),
+            ("8", "Diagnostic GitHub", self.show_github_diagnostic),
+            ("9", "Outils avancés", self.show_advanced_tools),
+            ("10", "Documentation du Père Claude", self.show_documentation),
             ("0", "Quitter", self.root.destroy),
         ]
 
@@ -317,6 +318,82 @@ class GitHubMenuApp:
 
         releases = self.run_gh(["release", "list", "--limit", "5"], cwd=repo)
         lines.append(self.format_result("Dernières versions", releases))
+        self.write_output("\n".join(lines))
+
+    def create_github_repository(self) -> None:
+        repo = self.require_repository()
+        if not (repo / ".git").exists():
+            raise RuntimeError(
+                "Ce dossier ne contient pas de dépôt Git local.\n\n"
+                "Créez d'abord le .git local avec GitDTL, puis revenez dans GitHubMenu."
+            )
+
+        remote = self.run_git(["remote", "get-url", "origin"], cwd=repo)
+        if remote.returncode == 0 and remote.stdout.strip():
+            self.write_output(
+                "Création du dépôt GitHub non lancée.\n\n"
+                "Un remote origin existe déjà pour ce projet :\n\n"
+                f"{remote.stdout.strip()}\n\n"
+                "Cette option sert à créer le dépôt GitHub avant le premier push, "
+                "quand le .git local n'a pas encore de dépôt distant."
+            )
+            return
+
+        repo_name = simpledialog.askstring(
+            APP_NAME,
+            "Nom du dépôt à créer sur GitHub :",
+            initialvalue=repo.name,
+            parent=self.root,
+        )
+        if not repo_name or not repo_name.strip():
+            return
+        repo_name = repo_name.strip()
+
+        description = simpledialog.askstring(
+            APP_NAME,
+            "Description du dépôt GitHub (facultatif) :",
+            initialvalue=f"Dépôt {repo_name}",
+            parent=self.root,
+        )
+        if description is None:
+            return
+
+        public_choice = messagebox.askyesnocancel(
+            APP_NAME,
+            "Visibilité du dépôt GitHub :\n\n"
+            "Oui : public\n"
+            "Non : privé\n"
+            "Annuler : abandonner",
+        )
+        if public_choice is None:
+            self.write_output("Création du dépôt GitHub annulée.")
+            return
+        visibility = "--public" if public_choice else "--private"
+
+        args = ["repo", "create", repo_name, "--source", str(repo), "--remote", "origin", visibility]
+        if description.strip():
+            args.extend(["--description", description.strip()])
+
+        create_result = self.run_gh(args, cwd=repo)
+        lines = [self.format_result("Création du dépôt GitHub", create_result)]
+        if create_result.returncode != 0:
+            self.write_output("\n".join(lines))
+            return
+
+        if messagebox.askyesno(
+            APP_NAME,
+            "Le dépôt GitHub est créé et le remote origin est configuré.\n\n"
+            "Voulez-vous pousser maintenant la branche locale vers GitHub ?",
+        ):
+            branch = self.run_git(["branch", "--show-current"], cwd=repo)
+            branch_name = branch.stdout.strip()
+            if branch.returncode != 0 or not branch_name:
+                lines.append(self.format_result("Détection de la branche locale", branch))
+                lines.append("Push initial non lancé : branche locale introuvable.")
+            else:
+                push = self.run_git(["push", "-u", "origin", branch_name], cwd=repo)
+                lines.append(self.format_result("Premier push vers GitHub", push))
+
         self.write_output("\n".join(lines))
 
     def publish_release(self) -> None:
