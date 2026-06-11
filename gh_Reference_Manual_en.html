@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>gh CLI Reference Manual — NetDTL Suite</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:#090d12;
+  color:#c9d1d9;
+  font-family:"IBM Plex Sans","Segoe UI",Arial,sans-serif;
+  font-size:15px;
+  line-height:1.7;
+  display:flex;
+  flex-direction:column;
+  min-height:100vh;
+}
+a{color:#58a6ff;text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* HEADER */
+.site-header{
+  background:#161b22;
+  border-bottom:1px solid #30363d;
+  padding:0 32px;
+  height:52px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:sticky;
+  top:0;
+  z-index:100;
+}
+.site-header .logo{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:14px;
+  color:#00ff00;
+  letter-spacing:.06em;
+}
+.site-header .subtitle{
+  font-size:11px;
+  color:#444c56;
+  letter-spacing:.08em;
+}
+
+/* LAYOUT */
+.layout{
+  display:flex;
+  flex:1;
+  max-width:1280px;
+  width:100%;
+  margin:0 auto;
+  padding:0;
+}
+
+/* SIDEBAR */
+.sidebar{
+  width:260px;
+  min-width:260px;
+  background:#0a0d10;
+  border-right:1px solid #21262d;
+  padding:24px 0 40px;
+  position:sticky;
+  top:52px;
+  height:calc(100vh - 52px);
+  overflow-y:auto;
+  flex-shrink:0;
+}
+.sidebar::-webkit-scrollbar{width:4px}
+.sidebar::-webkit-scrollbar-track{background:transparent}
+.sidebar::-webkit-scrollbar-thumb{background:#30363d}
+.sidebar-title{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:10px;
+  color:#444c56;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  padding:0 20px 12px;
+  border-bottom:1px solid #21262d;
+  margin-bottom:12px;
+}
+.sidebar nav a{
+  display:block;
+  padding:5px 20px;
+  font-size:13px;
+  color:#8b949e;
+  border-left:2px solid transparent;
+  transition:color .12s,border-color .12s,background .12s;
+}
+.sidebar nav a:hover{color:#c9d1d9;background:rgba(88,166,255,.06);text-decoration:none}
+.sidebar nav a.active{color:#58a6ff;border-left-color:#58a6ff;background:rgba(88,166,255,.08)}
+.sidebar nav a.h3{padding-left:34px;font-size:12px;color:#444c56}
+.sidebar nav a.h3:hover{color:#8b949e}
+.sidebar nav a.h3.active{color:#58a6ff;border-left-color:#58a6ff}
+
+/* CONTENT */
+.content{
+  flex:1;
+  padding:40px 48px 80px;
+  min-width:0;
+  background:#0d1117;
+}
+
+/* TYPOGRAPHY */
+.content h1{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:24px;
+  color:#00ff00;
+  border-bottom:1px solid #21262d;
+  padding-bottom:12px;
+  margin-bottom:28px;
+  letter-spacing:.03em;
+}
+.content h2{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:17px;
+  color:#58a6ff;
+  margin:40px 0 14px;
+  padding-bottom:6px;
+  border-bottom:1px solid #21262d;
+  letter-spacing:.02em;
+}
+.content h3{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:14px;
+  color:#e6edf3;
+  margin:28px 0 10px;
+}
+.content h4{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:13px;
+  color:#8b949e;
+  margin:20px 0 8px;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+}
+.content p{margin:0 0 14px}
+.content ul,.content ol{margin:0 0 14px 24px}
+.content li{margin-bottom:4px}
+.content hr{
+  border:none;
+  border-top:1px solid #21262d;
+  margin:32px 0;
+}
+.content blockquote{
+  border-left:3px solid #58a6ff;
+  background:#0a0d10;
+  padding:10px 16px;
+  margin:0 0 14px;
+  color:#8b949e;
+  font-size:13px;
+}
+
+/* CODE */
+code{
+  font-family:"IBM Plex Mono","Courier New",monospace;
+  font-size:13px;
+  background:#0a0d10;
+  color:#00ff00;
+  padding:1px 5px;
+  border-radius:3px;
+  border:1px solid #21262d;
+}
+pre{
+  background:#0a0d10;
+  border:1px solid #21262d;
+  border-left:3px solid #58a6ff;
+  border-radius:0 4px 4px 0;
+  padding:16px 18px;
+  overflow-x:auto;
+  margin:0 0 18px;
+}
+pre code{
+  background:transparent;
+  border:none;
+  padding:0;
+  font-size:13px;
+  color:#58a6ff;
+  line-height:1.8;
+}
+
+/* TABLES */
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin:0 0 18px;
+  font-size:13px;
+}
+th{
+  background:#161b22;
+  color:#58a6ff;
+  font-family:"IBM Plex Mono",monospace;
+  font-size:12px;
+  letter-spacing:.04em;
+  text-align:left;
+  padding:8px 12px;
+  border:1px solid #21262d;
+}
+td{
+  padding:7px 12px;
+  border:1px solid #21262d;
+  color:#c9d1d9;
+  vertical-align:top;
+}
+tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+td code{font-size:12px}
+
+/* FOOTER */
+.site-footer{
+  background:#161b22;
+  border-top:1px solid #30363d;
+  padding:14px 32px;
+  font-size:11px;
+  color:#444c56;
+  text-align:center;
+  letter-spacing:.04em;
+}
+
+@media(max-width:900px){
+  .sidebar{display:none}
+  .content{padding:24px 20px 60px}
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <span class="logo">NetDTL Suite &bull; gh CLI &bull; Reference Manual</span>
+  <span class="subtitle">DEC VT100 TRIBUTE &bull; didiermorandi.com/netdtl</span>
+</header>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-title">Contents</div>
+    <nav>
+  <a href="#table-of-contents" class="">Table of Contents</a>
+  <a href="#overview" class="">Overview</a>
+  <a href="#installation" class="">Installation</a>
+  <a href="#authentication" class="">Authentication</a>
+  <a href="#gh-auth-login" class="h3">gh auth login</a>
+  <a href="#gh-auth-logout" class="h3">gh auth logout</a>
+  <a href="#gh-auth-status" class="h3">gh auth status</a>
+  <a href="#gh-auth-refresh" class="h3">gh auth refresh</a>
+  <a href="#gh-auth-setup-git" class="h3">gh auth setup-git</a>
+  <a href="#gh-auth-switch" class="h3">gh auth switch</a>
+  <a href="#gh-auth-token" class="h3">gh auth token</a>
+  <a href="#global-options" class="">Global options</a>
+  <a href="#exit-codes" class="">Exit codes</a>
+  <a href="#environment-variables" class="">Environment variables</a>
+  <a href="#configuration" class="">Configuration</a>
+  <a href="#gh-config-list" class="h3">gh config list</a>
+  <a href="#gh-config-get-key" class="h3">gh config get <key></a>
+  <a href="#gh-config-set-key-value" class="h3">gh config set <key> <value></a>
+  <a href="#gh-config-clear-cache" class="h3">gh config clear-cache</a>
+  <a href="#command-reference" class="">Command reference</a>
+  <a href="#core-commands" class="h3">Core commands</a>
+  <a href="#github-actions-commands" class="h3">GitHub Actions commands</a>
+  <a href="#additional-commands" class="h3">Additional commands</a>
+  <a href="#output-formatting" class="">Output formatting</a>
+  <a href="#github-enterprise" class="">GitHub Enterprise</a>
+  <a href="#shell-completion" class="">Shell completion</a>
+</nav>
+
+  </aside>
+  <main class="content">
+    <h1 id="github-cli-gh-reference-manual">GitHub CLI (<code>gh</code>) — Reference Manual</h1>
+<blockquote>
+<p>Source: https://cli.github.com/manual/ — MIT License</p>
+</blockquote>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#authentication">Authentication</a></li>
+<li><a href="#global-options">Global options</a></li>
+<li><a href="#exit-codes">Exit codes</a></li>
+<li><a href="#environment-variables">Environment variables</a></li>
+<li><a href="#configuration">Configuration</a></li>
+<li><a href="#command-reference">Command reference</a></li>
+<li><a href="#core-commands">Core commands</a></li>
+<li><a href="#github-actions-commands">GitHub Actions commands</a></li>
+<li><a href="#additional-commands">Additional commands</a></li>
+<li><a href="#output-formatting">Output formatting</a></li>
+<li><a href="#github-enterprise">GitHub Enterprise</a></li>
+<li><a href="#shell-completion">Shell completion</a></li>
+</ol>
+<hr />
+<h2 id="overview">Overview</h2>
+<p><code>gh</code> is the official GitHub command-line interface. It brings GitHub operations — repositories, pull requests, issues, releases, workflows, and more — directly into the terminal, without switching to a browser.</p>
+<pre><code>gh &lt;command&gt; &lt;subcommand&gt; [flags]
+</code></pre>
+<p>All commands follow the same structure. Flags may be placed before or after arguments. Most commands that read data support <code>--json</code> for machine-readable output and <code>--jq</code> / <code>--template</code> for filtering.</p>
+<hr />
+<h2 id="installation">Installation</h2>
+<p>See the official instructions: https://github.com/cli/cli#installation</p>
+<p>Supported platforms: Linux, macOS, Windows. Available via <code>winget</code>, <code>brew</code>, <code>apt</code>, <code>dnf</code>, <code>conda</code>, and direct binary download.</p>
+<p>Verify installation:</p>
+<pre><code class="language-bash">gh --version
+</code></pre>
+<hr />
+<h2 id="authentication">Authentication</h2>
+<h3 id="gh-auth-login"><code>gh auth login</code></h3>
+<p>Authenticate with GitHub. Prompts for account type (GitHub.com or Enterprise), protocol (HTTPS or SSH), and preferred editor. Stores credentials in the system keyring or in <code>~/.config/gh/hosts.yml</code>.</p>
+<pre><code class="language-bash">gh auth login
+gh auth login --hostname github.mycompany.com
+gh auth login --with-token &lt; token.txt
+</code></pre>
+<h3 id="gh-auth-logout"><code>gh auth logout</code></h3>
+<p>Remove stored credentials for an account.</p>
+<pre><code class="language-bash">gh auth logout
+gh auth logout --hostname github.mycompany.com
+</code></pre>
+<h3 id="gh-auth-status"><code>gh auth status</code></h3>
+<p>Show the current authentication state for all known hosts.</p>
+<pre><code class="language-bash">gh auth status
+</code></pre>
+<h3 id="gh-auth-refresh"><code>gh auth refresh</code></h3>
+<p>Refresh or extend the OAuth token scopes for the current account.</p>
+<pre><code class="language-bash">gh auth refresh --scopes read:org,write:packages
+</code></pre>
+<h3 id="gh-auth-setup-git"><code>gh auth setup-git</code></h3>
+<p>Configure <code>git</code> to use <code>gh</code> as the credential helper.</p>
+<pre><code class="language-bash">gh auth setup-git
+</code></pre>
+<h3 id="gh-auth-switch"><code>gh auth switch</code></h3>
+<p>Switch the active account when multiple accounts are authenticated.</p>
+<pre><code class="language-bash">gh auth switch
+</code></pre>
+<h3 id="gh-auth-token"><code>gh auth token</code></h3>
+<p>Print the authentication token for the current session (useful in scripts).</p>
+<pre><code class="language-bash">gh auth token
+</code></pre>
+<hr />
+<h2 id="global-options">Global options</h2>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--version</code></td>
+<td>Print the <code>gh</code> version and exit</td>
+</tr>
+<tr>
+<td><code>--help</code>, <code>-h</code></td>
+<td>Show help for any command</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="exit-codes">Exit codes</h2>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>Success</td>
+</tr>
+<tr>
+<td>1</td>
+<td>General error</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Command usage error (bad flags, missing arguments)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Authentication required</td>
+</tr>
+</tbody>
+</table>
+<p>Run <code>gh help exit-codes</code> for the authoritative list.</p>
+<hr />
+<h2 id="environment-variables">Environment variables</h2>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GITHUB_TOKEN</code></td>
+<td>Authentication token; overrides stored credentials</td>
+</tr>
+<tr>
+<td><code>GH_TOKEN</code></td>
+<td>Same as <code>GITHUB_TOKEN</code>; takes precedence</td>
+</tr>
+<tr>
+<td><code>GH_HOST</code></td>
+<td>Default hostname; useful for Enterprise environments</td>
+</tr>
+<tr>
+<td><code>GH_ENTERPRISE_TOKEN</code></td>
+<td>Token for GitHub Enterprise scripting/automation</td>
+</tr>
+<tr>
+<td><code>GH_REPO</code></td>
+<td>Override the repository context (<code>owner/repo</code>)</td>
+</tr>
+<tr>
+<td><code>GH_EDITOR</code></td>
+<td>Editor launched for interactive input</td>
+</tr>
+<tr>
+<td><code>GH_BROWSER</code></td>
+<td>Browser used by <code>gh browse</code></td>
+</tr>
+<tr>
+<td><code>GH_PAGER</code></td>
+<td>Pager used for long output (default: <code>less</code>)</td>
+</tr>
+<tr>
+<td><code>NO_COLOR</code></td>
+<td>Disable ANSI color output</td>
+</tr>
+<tr>
+<td><code>CLICOLOR_FORCE</code></td>
+<td>Force color output even when not in a TTY</td>
+</tr>
+</tbody>
+</table>
+<p>Run <code>gh help environment</code> for the full list.</p>
+<hr />
+<h2 id="configuration">Configuration</h2>
+<h3 id="gh-config-list"><code>gh config list</code></h3>
+<p>List all current configuration keys and values.</p>
+<h3 id="gh-config-get-key"><code>gh config get &lt;key&gt;</code></h3>
+<p>Read a single configuration value.</p>
+<pre><code class="language-bash">gh config get editor
+</code></pre>
+<h3 id="gh-config-set-key-value"><code>gh config set &lt;key&gt; &lt;value&gt;</code></h3>
+<p>Set a configuration value. Optionally scoped to a specific host with <code>--host</code>.</p>
+<pre><code class="language-bash">gh config set editor &quot;code --wait&quot;
+gh config set git_protocol ssh
+gh config set prompt disabled
+</code></pre>
+<p>Available keys: <code>editor</code>, <code>git_protocol</code> (<code>https</code>/<code>ssh</code>), <code>prompt</code> (<code>enabled</code>/<code>disabled</code>), <code>pager</code>, <code>http_unix_socket</code>, <code>browser</code>.</p>
+<h3 id="gh-config-clear-cache"><code>gh config clear-cache</code></h3>
+<p>Clear the local HTTP response cache.</p>
+<hr />
+<h2 id="command-reference">Command reference</h2>
+<h3 id="core-commands">Core commands</h3>
+<hr />
+<h4 id="gh-repo"><code>gh repo</code></h4>
+<p>Manage GitHub repositories.</p>
+<table>
+<thead>
+<tr>
+<th>Subcommand</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>create</code></td>
+<td>Create a new repository (interactive or with flags)</td>
+</tr>
+<tr>
+<td><code>clone &lt;repo&gt;</code></td>
+<td>Clone a repository locally</td>
+</tr>
+<tr>
+<td><code>fork</code></td>
+<td>Fork the current or a specified repository</td>
+</tr>
+<tr>
+<td><code>view [repo]</code></td>
+<td>Display repository information</td>
+</tr>
+<tr>
+<td><code>list [owner]</code></td>
+<td>List repositories for a user or organization</td>
+</tr>
+<tr>
+<td><code>rename &lt;new-name&gt;</code></td>
+<td>Rename the current repository</td>
+</tr>
+<tr>
+<td><code>edit</code></td>
+<td>Edit repository settings (description, visibility, topics…)</td>
+</tr>
+<tr>
+<td><code>delete</code></td>
+<td>Delete a repository (requires confirmation)</td>
+</tr>
+<tr>
+<td><code>archive</code></td>
+<td>Archive a repository</td>
+</tr>
+<tr>
+<td><code>unarchive</code></td>
+<td>Unarchive a repository</td>
+</tr>
+<tr>
+<td><code>sync</code></td>
+<td>Sync a fork with its upstream</td>
+</tr>
+<tr>
+<td><code>set-default [repo]</code></td>
+<td>Set the default repository for the current directory</td>
+</tr>
+<tr>
+<td><code>deploy-key</code></td>
+<td>Manage deploy keys (<code>add</code>, <code>delete</code>, <code>list</code>)</td>
+</tr>
+<tr>
+<td><code>autolink</code></td>
+<td>Manage autolink references (<code>create</code>, <code>delete</code>, <code>list</code>, <code>view</code>)</td>
+</tr>
+<tr>
+<td><code>gitignore</code></td>
+<td>Browse and apply <code>.gitignore</code> templates (<code>list</code>, <code>view</code>)</td>
+</tr>
+<tr>
+<td><code>license</code></td>
+<td>Browse license templates (<code>list</code>, <code>view</code>)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Examples:</strong></p>
+<pre><code class="language-bash">gh repo create my-project --public --clone
+gh repo clone owner/repo
+gh repo view --web
+gh repo fork --clone
+gh repo sync
+</code></pre>
+<hr />
+<h4 id="gh-pr"><code>gh pr</code></h4>
+<p>Manage pull requests.</p>
+<table>
+<thead>
+<tr>
+<th>Subcommand</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>create</code></td>
+<td>Open a new pull request</td>
+</tr>
+<tr>
+<td><code>list</code></td>
+<td>List pull requests in the repository</td>
+</tr>
+<tr>
+<td><code>view [&lt;number&gt;]</code></td>
+<td>Display a pull request</td>
+</tr>
+<tr>
+<td><code>checkout &lt;number&gt;</code></td>
+<td>Check out a pull request branch locally</td>
+</tr>
+<tr>
+<td><code>checks [&lt;number&gt;]</code></td>
+<td>Show CI status checks for a pull request</td>
+</tr>
+<tr>
+<td><code>diff [&lt;number&gt;]</code></td>
+<td>Show the diff of a pull request</td>
+</tr>
+<tr>
+<td><code>merge [&lt;number&gt;]</code></td>
+<td>Merge a pull request</td>
+</tr>
+<tr>
+<td><code>close [&lt;number&gt;]</code></td>
+<td>Close a pull request</td>
+</tr>
+<tr>
+<td><code>reopen [&lt;number&gt;]</code></td>
+<td>Reopen a closed pull request</td>
+</tr>
+<tr>
+<td><code>edit [&lt;number&gt;]</code></td>
+<td>Edit metadata (title, body, labels, assignees…)</td>
+</tr>
+<tr>
+<td><code>ready [&lt;number&gt;]</code></td>
+<td>Mark a draft pull request as ready for review</td>
+</tr>
+<tr>
+<td><code>review [&lt;number&gt;]</code></td>
+<td>Submit a review (approve, request changes, comment)</td>
+</tr>
+<tr>
+<td><code>comment [&lt;number&gt;]</code></td>
+<td>Add a comment</td>
+</tr>
+<tr>
+<td><code>lock [&lt;number&gt;]</code></td>
+<td>Lock conversation</td>
+</tr>
+<tr>
+<td><code>unlock [&lt;number&gt;]</code></td>
+<td>Unlock conversation</td>
+</tr>
+<tr>
+<td><code>revert [&lt;number&gt;]</code></td>
+<td>Revert a merged pull request</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>Show pull requests relevant to the current user</td>
+</tr>
+<tr>
+<td><code>update-branch [&lt;number&gt;]</code></td>
+<td>Update the pull request branch with the base branch</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Examples:</strong></p>
+<pre><code class="language-bash">gh pr create --title &quot;Fix login bug&quot; --body &quot;Fixes #42&quot; --assignee @me
+gh pr list --state open --label bug
+gh pr checkout 321
+gh pr merge 321 --squash --delete-branch
+gh pr review 321 --approve
+</code></pre>
+<hr />
+<h4 id="gh-issue"><code>gh issue</code></h4>
+<p>Manage issues.</p>
+<table>
+<thead>
+<tr>
+<th>Subcommand</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>create</code></td>
+<td>Open a new issue</td>
+</tr>
+<tr>
+<td><code>list</code></td>
+<td>List issues</td>
+</tr>
+<tr>
+<td><code>view [&lt;number&gt;]</code></td>
+<td>Display an issue</td>
+</tr>
+<tr>
+<td><code>edit [&lt;number&gt;]</code></td>
+<td>Edit metadata</td>
+</tr>
+<tr>
+<td><code>close [&lt;number&gt;]</code></td>
+<td>Close an issue</td>
+</tr>
+<tr>
+<td><code>reopen [&lt;number&gt;]</code></td>
+<td>Reopen a closed issue</td>
+</tr>
+<tr>
+<td><code>comment [&lt;number&gt;]</code></td>
+<td>Add a comment</td>
+</tr>
+<tr>
+<td><code>delete [&lt;number&gt;]</code></td>
+<td>Delete an issue (requires admin)</td>
+</tr>
+<tr>
+<td><code>develop [&lt;number&gt;]</code></td>
+<td>Create or list development branches linked to the issue</td>
+</tr>
+<tr>
+<td><code>lock [&lt;number&gt;]</code></td>
+<td>Lock conversation</td>
+</tr>
+<tr>
+<td><code>unlock [&lt;number&gt;]</code></td>
+<td>Unlock conversation</td>
+</tr>
+<tr>
+<td><code>pin [&lt;number&gt;]</code></td>
+<td>Pin an issue</td>
+</tr>
+<tr>
+<td><code>unpin [&lt;number&gt;]</code></td>
+<td>Unpin an issue</td>
+</tr>
+<tr>
+<td><code>transfer [&lt;number&gt;] &lt;repo&gt;</code></td>
+<td>Transfer an issue to another repository</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>Show issues relevant to the current user</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Examples:</strong></p>
+<pre><code class="language-bash">gh issue create --title &quot;Crash on startup&quot; --label bug
+gh issue list --assignee @me --state open
+gh issue close 12 --comment &quot;Fixed in #34&quot;
+gh issue develop 12 --name fix/startup-crash
+</code></pre>
+<hr />
+<h4 id="gh-release"><code>gh release</code></h4>
+<p>Manage GitHub releases.</p>
+<table>
+<thead>
+<tr>
+<th>Subcommand</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>create &lt;tag&gt;</code></td>
+<td>Create a new release</td>
+</tr>
+<tr>
+<td><code>list</code></td>
+<td>List releases</td>
+</tr>
+<tr>
+<td><code>view [&lt;tag&gt;]</code></td>
+<td>Display a release</td>
+</tr>
+<tr>
+<td><code>edit &lt;tag&gt;</code></td>
+<td>Edit an existing release</td>
+</tr>
+<tr>
+<td><code>delete &lt;tag&gt;</code></td>
+<td>Delete a release</td>
+</tr>
+<tr>
+<td><code>download [&lt;tag&gt;]</code></td>
+<td>Download release assets</td>
+</tr>
+<tr>
+<td><code>upload &lt;tag&gt; &lt;files&gt;</code></td>
+<td>Upload assets to an existing release</td>
+</tr>
+<tr>
+<td><code>delete-asset &lt;tag&gt; &lt;asset&gt;</code></td>
+<td>Delete a release asset</td>
+</tr>
+<tr>
+<td><code>verify-asset</code></td>
+<td>Verify the integrity of a downloaded asset</td>
+</tr>
+<tr>
+<td><code>verify</code></td>
+<td>Verify a release using attestation</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Examples:</strong></p>
+<pre><code class="language-bash">gh release create v1.2.0 --title &quot;v1.2.0&quot; --notes &quot;Bug fixes&quot; dist/*.exe
+gh release list
+gh release download v1.2.0 --pattern &quot;*.exe&quot;
+gh release upload v1.2.0 build/MyApp.exe
+</code></pre>
+<hr />
+<h4 id="gh-gist"><code>gh gist</code></h4>
+<p>Manage GitHub Gists.</p>
+<table>
+<thead>
+<tr>
+<th>Subcommand</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>create [files]</code></td>
+<td>Create a new gist</td>
+</tr>
+<tr>
+<td><code>list</code></td>
+<td>List your gists</td>
+</tr>
+<tr>
+<td><code>view [&lt;id&gt;]</code></td>
+<td>Display a gist</td>
+</tr>
+<tr>
+<td><code>edit [&lt;id&gt;]</code></td>
+<td>Edit a gist</td>
+</tr>
+<tr>
+<td><code>clone &lt;id&gt;</code></td>
+<td>Clone a gist locally</td>
+</tr>
+<tr>
+<td><code>rename &lt;id&gt; &lt;old&gt; &lt;new&gt;</code></td>
+<td>Rename a file in a gist</td>
+</tr>
+<tr>
+<td><code>delete &lt;id&gt;</code></td>
+<td>Delete a gist</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Examples:</strong></p>
+<pre><code class="language-bash">gh gist create script.py --public --desc &quot;Useful script&quot;
+gh gist list
+gh gist view abc123 --raw
+</code></pre>
+<hr />
+<h4 id="gh-auth"><code>gh auth</code></h4>
+<p>See <a href="#authentication">Authentication</a> above.</p>
+<hr />
+<h4 id="gh-browse"><code>gh browse</code></h4>
+<p>Open a GitHub resource in the default browser.</p>
+<pre><code class="language-bash">gh browse                    # repository home page
+gh browse 42                 # issue or PR #42
+gh browse --branch main      # specific branch
+gh browse --commit abc1234   # specific commit
+gh browse --repo owner/repo  # another repository
+</code></pre>
+<hr />
+<h4 id="gh-org"><code>gh org</code></h4>
+<table>
+<thead>
+<tr>
+<th>Subcommand</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>list</code></td>
+<td>List organizations the current user belongs to</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="gh-project"><code>gh project</code></h4>
+<p>Manage GitHub Projects (v2).</p>
+<p>Subcommands: <code>create</code>, <code>list</code>, <code>view</code>, <code>edit</code>, <code>close</code>, <code>delete</code>, <code>copy</code>, <code>link</code>, <code>unlink</code>, <code>mark-template</code>, <code>field-create</code>, <code>field-delete</code>, <code>field-list</code>, <code>item-add</code>, <code>item-archive</code>, <code>item-create</code>, <code>item-delete</code>, <code>item-edit</code>, <code>item-list</code>.</p>
+<pre><code class="language-bash">gh project list
+gh project create --owner @me --title &quot;Sprint 12&quot;
+gh project item-add 1 --owner @me --url https://github.com/owner/repo/issues/42
+</code></pre>
+<hr />
+<h4 id="gh-codespace"><code>gh codespace</code></h4>
+<p>Manage GitHub Codespaces.</p>
+<p>Subcommands: <code>create</code>, <code>list</code>, <code>view</code>, <code>edit</code>, <code>delete</code>, <code>stop</code>, <code>rebuild</code>, <code>code</code>, <code>ssh</code>, <code>cp</code>, <code>logs</code>, <code>ports</code>, <code>ports forward</code>, <code>ports visibility</code>, <code>jupyter</code>.</p>
+<pre><code class="language-bash">gh codespace create --repo owner/repo --branch main
+gh codespace list
+gh codespace ssh
+</code></pre>
+<hr />
+<h3 id="github-actions-commands">GitHub Actions commands</h3>
+<hr />
+<h4 id="gh-run"><code>gh run</code></h4>
+<p>Manage workflow runs.</p>
+<table>
+<thead>
+<tr>
+<th>Subcommand</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>list</code></td>
+<td>List recent workflow runs</td>
+</tr>
+<tr>
+<td><code>view [&lt;run-id&gt;]</code></td>
+<td>Display run details and logs</td>
+</tr>
+<tr>
+<td><code>watch [&lt;run-id&gt;]</code></td>
+<td>Watch a run in real time</td>
+</tr>
+<tr>
+<td><code>rerun [&lt;run-id&gt;]</code></td>
+<td>Re-run a workflow (or only failed jobs)</td>
+</tr>
+<tr>
+<td><code>cancel [&lt;run-id&gt;]</code></td>
+<td>Cancel a running workflow</td>
+</tr>
+<tr>
+<td><code>delete [&lt;run-id&gt;]</code></td>
+<td>Delete a run</td>
+</tr>
+<tr>
+<td><code>download [&lt;run-id&gt;]</code></td>
+<td>Download run artifacts</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Examples:</strong></p>
+<pre><code class="language-bash">gh run list --workflow ci.yml
+gh run view 1234567890 --log
+gh run watch
+gh run rerun 1234567890 --failed-only
+</code></pre>
+<hr />
+<h4 id="gh-workflow"><code>gh workflow</code></h4>
+<p>Manage GitHub Actions workflow files.</p>
+<table>
+<thead>
+<tr>
+<th>Subcommand</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>list</code></td>
+<td>List workflow files</td>
+</tr>
+<tr>
+<td><code>view [&lt;workflow&gt;]</code></td>
+<td>Display a workflow file</td>
+</tr>
+<tr>
+<td><code>run &lt;workflow&gt;</code></td>
+<td>Trigger a workflow manually (<code>workflow_dispatch</code>)</td>
+</tr>
+<tr>
+<td><code>enable &lt;workflow&gt;</code></td>
+<td>Enable a workflow</td>
+</tr>
+<tr>
+<td><code>disable &lt;workflow&gt;</code></td>
+<td>Disable a workflow</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Examples:</strong></p>
+<pre><code class="language-bash">gh workflow list
+gh workflow run ci.yml --ref main
+gh workflow run deploy.yml --field environment=production
+</code></pre>
+<hr />
+<h4 id="gh-cache"><code>gh cache</code></h4>
+<p>Manage Actions cache entries.</p>
+<table>
+<thead>
+<tr>
+<th>Subcommand</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>list</code></td>
+<td>List cache entries</td>
+</tr>
+<tr>
+<td><code>delete &lt;id&gt;</code></td>
+<td>Delete a cache entry</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-bash">gh cache list
+gh cache delete 12345
+</code></pre>
+<hr />
+<h3 id="additional-commands">Additional commands</h3>
+<hr />
+<h4 id="gh-alias"><code>gh alias</code></h4>
+<p>Create and manage command shortcuts.</p>
+<pre><code class="language-bash">gh alias set pv 'pr view'
+gh alias set issues 'issue list --assignee @me'
+gh alias list
+gh alias delete pv
+gh alias import &lt; aliases.yml
+</code></pre>
+<hr />
+<h4 id="gh-api"><code>gh api</code></h4>
+<p>Make authenticated HTTP requests to the GitHub API (REST or GraphQL).</p>
+<pre><code class="language-bash"># REST {#rest}
+gh api repos/owner/repo
+gh api -X POST repos/owner/repo/issues --field title=&quot;Bug&quot; --field body=&quot;Details&quot;
+
+# GraphQL {#graphql}
+gh api graphql -f query='{ viewer { login } }'
+
+# Pagination {#pagination}
+gh api repos/owner/repo/issues --paginate
+</code></pre>
+<p>Supports <code>--jq</code> for filtering and <code>--template</code> for Go template formatting.</p>
+<hr />
+<h4 id="gh-search"><code>gh search</code></h4>
+<p>Search GitHub from the command line.</p>
+<table>
+<thead>
+<tr>
+<th>Subcommand</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>repos</code></td>
+<td>Search repositories</td>
+</tr>
+<tr>
+<td><code>issues</code></td>
+<td>Search issues</td>
+</tr>
+<tr>
+<td><code>prs</code></td>
+<td>Search pull requests</td>
+</tr>
+<tr>
+<td><code>commits</code></td>
+<td>Search commits</td>
+</tr>
+<tr>
+<td><code>code</code></td>
+<td>Search code</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-bash">gh search repos &quot;network scanner&quot; --language php --stars &quot;&gt;100&quot;
+gh search issues &quot;login bug&quot; --repo owner/repo --state open
+gh search code &quot;WScript.Shell&quot; --language vbscript
+</code></pre>
+<hr />
+<h4 id="gh-secret"><code>gh secret</code></h4>
+<p>Manage Actions secrets.</p>
+<pre><code class="language-bash">gh secret set MY_SECRET
+gh secret set MY_SECRET --body &quot;value&quot;
+gh secret list
+gh secret delete MY_SECRET
+</code></pre>
+<p>Scope flags: <code>--repo</code>, <code>--org</code>, <code>--env</code>.</p>
+<hr />
+<h4 id="gh-variable"><code>gh variable</code></h4>
+<p>Manage Actions variables.</p>
+<pre><code class="language-bash">gh variable set APP_ENV --body &quot;production&quot;
+gh variable get APP_ENV
+gh variable list
+gh variable delete APP_ENV
+</code></pre>
+<hr />
+<h4 id="gh-label"><code>gh label</code></h4>
+<p>Manage repository labels.</p>
+<pre><code class="language-bash">gh label list
+gh label create bug --color CC0000 --description &quot;Something is wrong&quot;
+gh label edit bug --name &quot;Bug&quot; --color EE0000
+gh label delete bug
+gh label clone owner/source-repo   # copy all labels from another repo
+</code></pre>
+<hr />
+<h4 id="gh-extension"><code>gh extension</code></h4>
+<p>Manage <code>gh</code> extensions (third-party subcommands).</p>
+<pre><code class="language-bash">gh extension search
+gh extension browse
+gh extension install owner/gh-ext-name
+gh extension list
+gh extension upgrade gh-ext-name
+gh extension remove gh-ext-name
+gh extension create my-extension
+gh extension exec my-extension
+</code></pre>
+<hr />
+<h4 id="gh-copilot"><code>gh copilot</code></h4>
+<p>Interface with GitHub Copilot from the CLI (requires Copilot subscription).</p>
+<pre><code class="language-bash">gh copilot suggest &quot;how do I squash commits&quot;
+gh copilot explain &quot;git rebase -i HEAD~3&quot;
+</code></pre>
+<hr />
+<h4 id="gh-attestation"><code>gh attestation</code></h4>
+<p>Manage artifact attestations (supply-chain security).</p>
+<pre><code class="language-bash">gh attestation verify artifact.tar.gz --owner myorg
+gh attestation download artifact.tar.gz --owner myorg
+gh attestation trusted-root
+</code></pre>
+<hr />
+<h4 id="gh-ruleset"><code>gh ruleset</code></h4>
+<p>Inspect repository and organization rulesets.</p>
+<pre><code class="language-bash">gh ruleset list
+gh ruleset view 12
+gh ruleset check main
+</code></pre>
+<hr />
+<h4 id="gh-gpg-key"><code>gh gpg-key</code></h4>
+<p>Manage GPG keys associated with the GitHub account.</p>
+<pre><code class="language-bash">gh gpg-key list
+gh gpg-key add key.gpg
+gh gpg-key delete &lt;key-id&gt;
+</code></pre>
+<hr />
+<h4 id="gh-ssh-key"><code>gh ssh-key</code></h4>
+<p>Manage SSH keys associated with the GitHub account.</p>
+<pre><code class="language-bash">gh ssh-key list
+gh ssh-key add ~/.ssh/id_ed25519.pub --title &quot;workstation&quot;
+gh ssh-key delete &lt;key-id&gt;
+</code></pre>
+<hr />
+<h4 id="gh-status"><code>gh status</code></h4>
+<p>Show a dashboard of pull requests, issues, and review requests relevant to the current user across all repositories.</p>
+<pre><code class="language-bash">gh status
+</code></pre>
+<hr />
+<h4 id="gh-completion"><code>gh completion</code></h4>
+<p>Generate shell completion scripts.</p>
+<pre><code class="language-bash">gh completion -s bash   &gt;&gt; ~/.bashrc
+gh completion -s zsh    &gt;&gt; ~/.zshrc
+gh completion -s fish   &gt;&gt; ~/.config/fish/completions/gh.fish
+gh completion -s powershell
+</code></pre>
+<hr />
+<h4 id="gh-licenses"><code>gh licenses</code></h4>
+<p>List available open-source license identifiers.</p>
+<pre><code class="language-bash">gh licenses
+</code></pre>
+<hr />
+<h4 id="gh-skill"><code>gh skill</code></h4>
+<p>Manage Copilot skills (preview feature).</p>
+<p>Subcommands: <code>install</code>, <code>preview</code>, <code>publish</code>, <code>search</code>, <code>update</code>.</p>
+<hr />
+<h4 id="gh-agent-task"><code>gh agent-task</code></h4>
+<p>Manage Copilot agent tasks (preview feature).</p>
+<p>Subcommands: <code>create</code>, <code>list</code>, <code>view</code>.</p>
+<hr />
+<h2 id="output-formatting">Output formatting</h2>
+<p>Most list and view commands accept:</p>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--json &lt;fields&gt;</code></td>
+<td>Output as JSON, selecting specific fields</td>
+</tr>
+<tr>
+<td><code>--jq &lt;expression&gt;</code></td>
+<td>Filter JSON output with a <code>jq</code> expression</td>
+</tr>
+<tr>
+<td><code>--template &lt;string&gt;</code></td>
+<td>Format output with a Go template</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-bash">gh pr list --json number,title,state
+gh pr list --json number,title --jq '.[].title'
+gh issue list --template '{{range .}}{{.number}}: {{.title}}{{&quot;\n&quot;}}{{end}}'
+</code></pre>
+<p>Run <code>gh help formatting</code> for details on available template functions.</p>
+<hr />
+<h2 id="github-enterprise">GitHub Enterprise</h2>
+<pre><code class="language-bash"># Authenticate against an Enterprise instance {#authenticate-against-an-enterprise-instance}
+gh auth login --hostname github.mycompany.com
+
+# Set default host for all commands {#set-default-host-for-all-commands}
+export GH_HOST=github.mycompany.com
+
+# Scripting / automation {#scripting-automation}
+export GH_ENTERPRISE_TOKEN=&lt;token&gt;
+</code></pre>
+<p>Supported from GitHub Enterprise Server 2.20 onwards.</p>
+<hr />
+<h2 id="shell-completion">Shell completion</h2>
+<p>See <a href="#gh-completion"><code>gh completion</code></a> above.</p>
+<hr />
+<p><em>Reference: https://cli.github.com/manual/ — GitHub CLI is open source under the MIT License.</em></p>
+  </main>
+</div>
+
+<footer class="site-footer">
+  GitHub CLI Manual &mdash; Source: cli.github.com/manual &mdash; MIT License &mdash; NetDTL Suite &mdash; didiermorandi.com/netdtl
+</footer>
+
+<script>
+(function(){
+  var links = document.querySelectorAll('.sidebar nav a');
+  var headings = [];
+  links.forEach(function(a){
+    var id = a.getAttribute('href');
+    if(id && id.charAt(0)==='#'){
+      var el = document.getElementById(id.slice(1));
+      if(el) headings.push({el:el,a:a});
+    }
+  });
+  function onScroll(){
+    var scroll = window.scrollY + 80;
+    var cur = null;
+    for(var i=0;i<headings.length;i++){
+      if(headings[i].el.offsetTop <= scroll) cur = headings[i];
+    }
+    links.forEach(function(a){a.classList.remove('active')});
+    if(cur) cur.a.classList.add('active');
+  }
+  window.addEventListener('scroll',onScroll,{passive:true});
+  onScroll();
+})();
+</script>
+</body>
+</html>

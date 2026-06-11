@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>gh CLI User Guide — NetDTL Suite</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:#090d12;
+  color:#c9d1d9;
+  font-family:"IBM Plex Sans","Segoe UI",Arial,sans-serif;
+  font-size:15px;
+  line-height:1.7;
+  display:flex;
+  flex-direction:column;
+  min-height:100vh;
+}
+a{color:#58a6ff;text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* HEADER */
+.site-header{
+  background:#161b22;
+  border-bottom:1px solid #30363d;
+  padding:0 32px;
+  height:52px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:sticky;
+  top:0;
+  z-index:100;
+}
+.site-header .logo{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:14px;
+  color:#00ff00;
+  letter-spacing:.06em;
+}
+.site-header .subtitle{
+  font-size:11px;
+  color:#444c56;
+  letter-spacing:.08em;
+}
+
+/* LAYOUT */
+.layout{
+  display:flex;
+  flex:1;
+  max-width:1280px;
+  width:100%;
+  margin:0 auto;
+  padding:0;
+}
+
+/* SIDEBAR */
+.sidebar{
+  width:260px;
+  min-width:260px;
+  background:#0a0d10;
+  border-right:1px solid #21262d;
+  padding:24px 0 40px;
+  position:sticky;
+  top:52px;
+  height:calc(100vh - 52px);
+  overflow-y:auto;
+  flex-shrink:0;
+}
+.sidebar::-webkit-scrollbar{width:4px}
+.sidebar::-webkit-scrollbar-track{background:transparent}
+.sidebar::-webkit-scrollbar-thumb{background:#30363d}
+.sidebar-title{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:10px;
+  color:#444c56;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  padding:0 20px 12px;
+  border-bottom:1px solid #21262d;
+  margin-bottom:12px;
+}
+.sidebar nav a{
+  display:block;
+  padding:5px 20px;
+  font-size:13px;
+  color:#8b949e;
+  border-left:2px solid transparent;
+  transition:color .12s,border-color .12s,background .12s;
+}
+.sidebar nav a:hover{color:#c9d1d9;background:rgba(88,166,255,.06);text-decoration:none}
+.sidebar nav a.active{color:#58a6ff;border-left-color:#58a6ff;background:rgba(88,166,255,.08)}
+.sidebar nav a.h3{padding-left:34px;font-size:12px;color:#444c56}
+.sidebar nav a.h3:hover{color:#8b949e}
+.sidebar nav a.h3.active{color:#58a6ff;border-left-color:#58a6ff}
+
+/* CONTENT */
+.content{
+  flex:1;
+  padding:40px 48px 80px;
+  min-width:0;
+  background:#0d1117;
+}
+
+/* TYPOGRAPHY */
+.content h1{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:24px;
+  color:#00ff00;
+  border-bottom:1px solid #21262d;
+  padding-bottom:12px;
+  margin-bottom:28px;
+  letter-spacing:.03em;
+}
+.content h2{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:17px;
+  color:#58a6ff;
+  margin:40px 0 14px;
+  padding-bottom:6px;
+  border-bottom:1px solid #21262d;
+  letter-spacing:.02em;
+}
+.content h3{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:14px;
+  color:#e6edf3;
+  margin:28px 0 10px;
+}
+.content h4{
+  font-family:"IBM Plex Mono",monospace;
+  font-size:13px;
+  color:#8b949e;
+  margin:20px 0 8px;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+}
+.content p{margin:0 0 14px}
+.content ul,.content ol{margin:0 0 14px 24px}
+.content li{margin-bottom:4px}
+.content hr{
+  border:none;
+  border-top:1px solid #21262d;
+  margin:32px 0;
+}
+.content blockquote{
+  border-left:3px solid #58a6ff;
+  background:#0a0d10;
+  padding:10px 16px;
+  margin:0 0 14px;
+  color:#8b949e;
+  font-size:13px;
+}
+
+/* CODE */
+code{
+  font-family:"IBM Plex Mono","Courier New",monospace;
+  font-size:13px;
+  background:#0a0d10;
+  color:#00ff00;
+  padding:1px 5px;
+  border-radius:3px;
+  border:1px solid #21262d;
+}
+pre{
+  background:#0a0d10;
+  border:1px solid #21262d;
+  border-left:3px solid #58a6ff;
+  border-radius:0 4px 4px 0;
+  padding:16px 18px;
+  overflow-x:auto;
+  margin:0 0 18px;
+}
+pre code{
+  background:transparent;
+  border:none;
+  padding:0;
+  font-size:13px;
+  color:#58a6ff;
+  line-height:1.8;
+}
+
+/* TABLES */
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin:0 0 18px;
+  font-size:13px;
+}
+th{
+  background:#161b22;
+  color:#58a6ff;
+  font-family:"IBM Plex Mono",monospace;
+  font-size:12px;
+  letter-spacing:.04em;
+  text-align:left;
+  padding:8px 12px;
+  border:1px solid #21262d;
+}
+td{
+  padding:7px 12px;
+  border:1px solid #21262d;
+  color:#c9d1d9;
+  vertical-align:top;
+}
+tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+td code{font-size:12px}
+
+/* FOOTER */
+.site-footer{
+  background:#161b22;
+  border-top:1px solid #30363d;
+  padding:14px 32px;
+  font-size:11px;
+  color:#444c56;
+  text-align:center;
+  letter-spacing:.04em;
+}
+
+@media(max-width:900px){
+  .sidebar{display:none}
+  .content{padding:24px 20px 60px}
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <span class="logo">NetDTL Suite &bull; gh CLI &bull; User Guide</span>
+  <span class="subtitle">DEC VT100 TRIBUTE &bull; didiermorandi.com/netdtl</span>
+</header>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-title">Contents</div>
+    <nav>
+  <a href="#table-of-contents" class="">Table of Contents</a>
+  <a href="#what-is-gh" class="">What is gh?</a>
+  <a href="#installation" class="">Installation</a>
+  <a href="#first-time-setup" class="">First-time setup</a>
+  <a href="#authenticate" class="h3">Authenticate</a>
+  <a href="#set-your-preferred-editor" class="h3">Set your preferred editor</a>
+  <a href="#set-the-default-git-protocol" class="h3">Set the default Git protocol</a>
+  <a href="#working-with-repositories" class="">Working with repositories</a>
+  <a href="#clone-a-repository" class="h3">Clone a repository</a>
+  <a href="#create-a-new-repository" class="h3">Create a new repository</a>
+  <a href="#view-repository-information" class="h3">View repository information</a>
+  <a href="#fork-a-repository" class="h3">Fork a repository</a>
+  <a href="#sync-a-fork-with-upstream" class="h3">Sync a fork with upstream</a>
+  <a href="#edit-repository-settings" class="h3">Edit repository settings</a>
+  <a href="#list-repositories" class="h3">List repositories</a>
+  <a href="#working-with-pull-requests" class="">Working with pull requests</a>
+  <a href="#create-a-pull-request" class="h3">Create a pull request</a>
+  <a href="#list-and-filter-pull-requests" class="h3">List and filter pull requests</a>
+  <a href="#view-a-pull-request" class="h3">View a pull request</a>
+  <a href="#check-out-a-pull-request-locally" class="h3">Check out a pull request locally</a>
+  <a href="#review-a-pull-request" class="h3">Review a pull request</a>
+  <a href="#check-ci-status" class="h3">Check CI status</a>
+  <a href="#merge-a-pull-request" class="h3">Merge a pull request</a>
+  <a href="#other-pr-operations" class="h3">Other PR operations</a>
+  <a href="#dashboard-your-prs-at-a-glance" class="h3">Dashboard: your PRs at a glance</a>
+  <a href="#working-with-issues" class="">Working with issues</a>
+  <a href="#create-an-issue" class="h3">Create an issue</a>
+  <a href="#list-and-filter-issues" class="h3">List and filter issues</a>
+  <a href="#view-an-issue" class="h3">View an issue</a>
+  <a href="#comment-on-an-issue" class="h3">Comment on an issue</a>
+  <a href="#close-or-reopen" class="h3">Close or reopen</a>
+  <a href="#edit-pin-transfer" class="h3">Edit, pin, transfer</a>
+  <a href="#create-a-development-branch-from-an-issue" class="h3">Create a development branch from an issue</a>
+  <a href="#dashboard" class="h3">Dashboard</a>
+  <a href="#working-with-releases" class="">Working with releases</a>
+  <a href="#create-a-release" class="h3">Create a release</a>
+  <a href="#list-and-view-releases" class="h3">List and view releases</a>
+  <a href="#download-release-assets" class="h3">Download release assets</a>
+  <a href="#upload-additional-assets" class="h3">Upload additional assets</a>
+  <a href="#edit-or-delete-a-release" class="h3">Edit or delete a release</a>
+  <a href="#working-with-github-actions" class="">Working with GitHub Actions</a>
+  <a href="#trigger-a-workflow-manually" class="h3">Trigger a workflow manually</a>
+  <a href="#list-and-view-workflow-runs" class="h3">List and view workflow runs</a>
+  <a href="#watch-a-run-in-real-time" class="h3">Watch a run in real time</a>
+  <a href="#re-run-a-workflow" class="h3">Re-run a workflow</a>
+  <a href="#cancel-or-delete-a-run" class="h3">Cancel or delete a run</a>
+  <a href="#download-artifacts" class="h3">Download artifacts</a>
+  <a href="#manage-workflow-files" class="h3">Manage workflow files</a>
+  <a href="#searching-github" class="">Searching GitHub</a>
+  <a href="#managing-secrets-and-variables" class="">Managing secrets and variables</a>
+  <a href="#secrets-encrypted-write-only" class="h3">Secrets (encrypted, write-only)</a>
+  <a href="#variables-plaintext-readable" class="h3">Variables (plaintext, readable)</a>
+  <a href="#aliases-building-your-own-shortcuts" class="">Aliases: building your own shortcuts</a>
+  <a href="#the-api-command" class="">The API command</a>
+  <a href="#rest-examples" class="h3">REST examples</a>
+  <a href="#graphql-example" class="h3">GraphQL example</a>
+  <a href="#extensions" class="">Extensions</a>
+  <a href="#shell-completion" class="">Shell completion</a>
+  <a href="#github-enterprise" class="">GitHub Enterprise</a>
+  <a href="#tips-and-tricks" class="">Tips and tricks</a>
+  <a href="#open-anything-in-the-browser" class="h3">Open anything in the browser</a>
+  <a href="#check-your-overall-status-across-all-repositories" class="h3">Check your overall status across all repositories</a>
+  <a href="#use---json---jq-for-scripting" class="h3">Use --json + --jq for scripting</a>
+  <a href="#get-a-token-for-use-in-scripts" class="h3">Get a token for use in scripts</a>
+  <a href="#set-the-default-repository-in-a-directory" class="h3">Set the default repository in a directory</a>
+  <a href="#get-help-for-any-command" class="h3">Get help for any command</a>
+</nav>
+
+  </aside>
+  <main class="content">
+    <h1 id="github-cli-gh-user-guide">GitHub CLI (<code>gh</code>) — User Guide</h1>
+<blockquote>
+<p>A practical introduction to <code>gh</code> for day-to-day GitHub work.</p>
+</blockquote>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#what-is-gh">What is <code>gh</code>?</a></li>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#first-time-setup">First-time setup</a></li>
+<li><a href="#working-with-repositories">Working with repositories</a></li>
+<li><a href="#working-with-pull-requests">Working with pull requests</a></li>
+<li><a href="#working-with-issues">Working with issues</a></li>
+<li><a href="#working-with-releases">Working with releases</a></li>
+<li><a href="#working-with-github-actions">Working with GitHub Actions</a></li>
+<li><a href="#searching-github">Searching GitHub</a></li>
+<li><a href="#managing-secrets-and-variables">Managing secrets and variables</a></li>
+<li><a href="#aliases-building-your-own-shortcuts">Aliases: building your own shortcuts</a></li>
+<li><a href="#the-api-command">The API command</a></li>
+<li><a href="#extensions">Extensions</a></li>
+<li><a href="#shell-completion">Shell completion</a></li>
+<li><a href="#github-enterprise">GitHub Enterprise</a></li>
+<li><a href="#tips-and-tricks">Tips and tricks</a></li>
+</ol>
+<hr />
+<h2 id="what-is-gh">What is <code>gh</code>?</h2>
+<p><code>gh</code> is the official GitHub CLI. Instead of switching between your terminal and a browser, you can create pull requests, review code, file issues, trigger workflows, and manage releases — all without leaving the command line.</p>
+<p>It complements <code>git</code>: while <code>git</code> handles local version control, <code>gh</code> handles the GitHub-specific parts (remotes, pull requests, Actions, etc.).</p>
+<hr />
+<h2 id="installation">Installation</h2>
+<p>Follow the instructions for your platform at https://github.com/cli/cli#installation.</p>
+<p>Quick options:</p>
+<pre><code class="language-bash"># macOS (Homebrew) {#macos-homebrew}
+brew install gh
+
+# Windows (winget) {#windows-winget}
+winget install GitHub.cli
+
+# Ubuntu / Debian {#ubuntu-debian}
+sudo apt install gh
+
+# Verify {#verify}
+gh --version
+</code></pre>
+<hr />
+<h2 id="first-time-setup">First-time setup</h2>
+<h3 id="authenticate">Authenticate</h3>
+<pre><code class="language-bash">gh auth login
+</code></pre>
+<p>The interactive prompt will ask for:</p>
+<ul>
+<li>Account type: <strong>GitHub.com</strong> or <strong>GitHub Enterprise Server</strong></li>
+<li>Protocol: <strong>HTTPS</strong> (recommended for most users) or <strong>SSH</strong></li>
+<li>How to authenticate: browser flow or paste a token</li>
+</ul>
+<p>After login, verify everything works:</p>
+<pre><code class="language-bash">gh auth status
+</code></pre>
+<h3 id="set-your-preferred-editor">Set your preferred editor</h3>
+<pre><code class="language-bash">gh config set editor &quot;code --wait&quot;   # VS Code
+gh config set editor vim
+gh config set editor notepad         # Windows
+</code></pre>
+<h3 id="set-the-default-git-protocol">Set the default Git protocol</h3>
+<pre><code class="language-bash">gh config set git_protocol ssh       # use SSH for cloning
+gh config set git_protocol https     # use HTTPS
+</code></pre>
+<hr />
+<h2 id="working-with-repositories">Working with repositories</h2>
+<h3 id="clone-a-repository">Clone a repository</h3>
+<pre><code class="language-bash">gh repo clone owner/repo
+gh repo clone owner/repo -- --depth 1   # shallow clone
+</code></pre>
+<h3 id="create-a-new-repository">Create a new repository</h3>
+<pre><code class="language-bash"># Interactive wizard {#interactive-wizard}
+gh repo create
+
+# Fully specified {#fully-specified}
+gh repo create my-project --public --description &quot;My new project&quot; --clone
+gh repo create my-project --private --source=. --push
+</code></pre>
+<h3 id="view-repository-information">View repository information</h3>
+<pre><code class="language-bash">gh repo view                   # current repository
+gh repo view owner/repo        # any repository
+gh repo view --web             # open in browser
+</code></pre>
+<h3 id="fork-a-repository">Fork a repository</h3>
+<pre><code class="language-bash">gh repo fork owner/repo --clone
+</code></pre>
+<h3 id="sync-a-fork-with-upstream">Sync a fork with upstream</h3>
+<pre><code class="language-bash">gh repo sync                   # sync current fork with upstream
+gh repo sync --branch main
+</code></pre>
+<h3 id="edit-repository-settings">Edit repository settings</h3>
+<pre><code class="language-bash">gh repo edit --description &quot;Updated description&quot;
+gh repo edit --visibility private
+gh repo edit --enable-issues=false
+gh repo edit --add-topic cli --add-topic automation
+</code></pre>
+<h3 id="list-repositories">List repositories</h3>
+<pre><code class="language-bash">gh repo list
+gh repo list myorg --limit 50
+gh repo list --language python --source
+</code></pre>
+<hr />
+<h2 id="working-with-pull-requests">Working with pull requests</h2>
+<p>Pull requests are the heart of <code>gh</code>. The commands below cover the full lifecycle.</p>
+<h3 id="create-a-pull-request">Create a pull request</h3>
+<pre><code class="language-bash"># Interactive (picks up your branch and recent commits) {#interactive-picks-up-your-branch-and-recent-commits}
+gh pr create
+
+# Fully specified {#fully-specified}
+gh pr create \
+  --title &quot;Fix login timeout&quot; \
+  --body &quot;Fixes #42. Increases the session timeout to 30 minutes.&quot; \
+  --base main \
+  --head fix/login-timeout \
+  --reviewer alice,bob \
+  --assignee @me \
+  --label bug
+</code></pre>
+<p>To open the editor for the body:</p>
+<pre><code class="language-bash">gh pr create --fill   # prefill from commits, open editor for review
+</code></pre>
+<h3 id="list-and-filter-pull-requests">List and filter pull requests</h3>
+<pre><code class="language-bash">gh pr list
+gh pr list --state open
+gh pr list --assignee @me
+gh pr list --label &quot;needs review&quot;
+gh pr list --draft
+gh pr list --base main
+</code></pre>
+<h3 id="view-a-pull-request">View a pull request</h3>
+<pre><code class="language-bash">gh pr view              # current branch's PR
+gh pr view 321
+gh pr view 321 --web    # open in browser
+</code></pre>
+<h3 id="check-out-a-pull-request-locally">Check out a pull request locally</h3>
+<pre><code class="language-bash">gh pr checkout 321
+</code></pre>
+<p>This creates a local tracking branch and switches to it.</p>
+<h3 id="review-a-pull-request">Review a pull request</h3>
+<pre><code class="language-bash">gh pr review 321 --approve
+gh pr review 321 --request-changes --body &quot;Please add tests.&quot;
+gh pr review 321 --comment --body &quot;Looks good overall.&quot;
+</code></pre>
+<h3 id="check-ci-status">Check CI status</h3>
+<pre><code class="language-bash">gh pr checks 321
+gh pr checks 321 --watch   # live update until all checks finish
+</code></pre>
+<h3 id="merge-a-pull-request">Merge a pull request</h3>
+<pre><code class="language-bash">gh pr merge 321 --merge             # merge commit
+gh pr merge 321 --squash            # squash and merge
+gh pr merge 321 --rebase            # rebase and merge
+gh pr merge 321 --squash --delete-branch --auto   # auto-merge when checks pass
+</code></pre>
+<h3 id="other-pr-operations">Other PR operations</h3>
+<pre><code class="language-bash">gh pr diff 321                    # show the diff
+gh pr edit 321 --title &quot;New title&quot; --add-label &quot;ready&quot;
+gh pr ready 321                   # convert draft to ready
+gh pr close 321 --comment &quot;Superseded by #400&quot;
+gh pr reopen 321
+gh pr lock 321 --reason resolved
+gh pr update-branch 321           # update with base branch
+gh pr revert 321                  # create a revert PR
+</code></pre>
+<h3 id="dashboard-your-prs-at-a-glance">Dashboard: your PRs at a glance</h3>
+<pre><code class="language-bash">gh pr status
+</code></pre>
+<hr />
+<h2 id="working-with-issues">Working with issues</h2>
+<h3 id="create-an-issue">Create an issue</h3>
+<pre><code class="language-bash">gh issue create
+gh issue create --title &quot;Crash on Windows 11&quot; --label bug --assignee @me
+</code></pre>
+<h3 id="list-and-filter-issues">List and filter issues</h3>
+<pre><code class="language-bash">gh issue list
+gh issue list --state open --label bug
+gh issue list --assignee alice
+gh issue list --milestone &quot;v2.0&quot;
+</code></pre>
+<h3 id="view-an-issue">View an issue</h3>
+<pre><code class="language-bash">gh issue view 42
+gh issue view 42 --web
+</code></pre>
+<h3 id="comment-on-an-issue">Comment on an issue</h3>
+<pre><code class="language-bash">gh issue comment 42 --body &quot;Reproduced on 3.1. Investigating.&quot;
+</code></pre>
+<h3 id="close-or-reopen">Close or reopen</h3>
+<pre><code class="language-bash">gh issue close 42
+gh issue close 42 --reason &quot;not planned&quot;
+gh issue reopen 42
+</code></pre>
+<h3 id="edit-pin-transfer">Edit, pin, transfer</h3>
+<pre><code class="language-bash">gh issue edit 42 --title &quot;Updated title&quot; --add-label enhancement
+gh issue pin 42
+gh issue transfer 42 owner/other-repo
+</code></pre>
+<h3 id="create-a-development-branch-from-an-issue">Create a development branch from an issue</h3>
+<pre><code class="language-bash">gh issue develop 42 --name fix/crash-windows
+</code></pre>
+<p>This creates a branch linked to the issue on GitHub, checks it out locally.</p>
+<h3 id="dashboard">Dashboard</h3>
+<pre><code class="language-bash">gh issue status
+</code></pre>
+<hr />
+<h2 id="working-with-releases">Working with releases</h2>
+<h3 id="create-a-release">Create a release</h3>
+<pre><code class="language-bash"># Interactive {#interactive}
+gh release create v1.0.0
+
+# Fully specified, with assets {#fully-specified-with-assets}
+gh release create v1.0.0 \
+  --title &quot;Version 1.0.0&quot; \
+  --notes &quot;First stable release.&quot; \
+  dist/MyApp.exe dist/MyApp-linux
+
+# Generate release notes automatically from merged PRs {#generate-release-notes-automatically-from-merged-prs}
+gh release create v1.0.0 --generate-notes
+</code></pre>
+<h3 id="list-and-view-releases">List and view releases</h3>
+<pre><code class="language-bash">gh release list
+gh release view v1.0.0
+gh release view --web
+</code></pre>
+<h3 id="download-release-assets">Download release assets</h3>
+<pre><code class="language-bash">gh release download v1.0.0                        # all assets
+gh release download v1.0.0 --pattern &quot;*.exe&quot;      # filtered
+gh release download                                # latest release
+</code></pre>
+<h3 id="upload-additional-assets">Upload additional assets</h3>
+<pre><code class="language-bash">gh release upload v1.0.0 new-asset.zip
+</code></pre>
+<h3 id="edit-or-delete-a-release">Edit or delete a release</h3>
+<pre><code class="language-bash">gh release edit v1.0.0 --title &quot;Version 1.0.0 (hotfix)&quot;
+gh release delete v1.0.0
+</code></pre>
+<hr />
+<h2 id="working-with-github-actions">Working with GitHub Actions</h2>
+<h3 id="trigger-a-workflow-manually">Trigger a workflow manually</h3>
+<pre><code class="language-bash">gh workflow run ci.yml
+gh workflow run deploy.yml --ref main --field environment=staging
+</code></pre>
+<h3 id="list-and-view-workflow-runs">List and view workflow runs</h3>
+<pre><code class="language-bash">gh run list
+gh run list --workflow ci.yml --limit 10
+gh run view 1234567890
+gh run view 1234567890 --log          # full logs
+gh run view 1234567890 --log-failed   # only failed job logs
+</code></pre>
+<h3 id="watch-a-run-in-real-time">Watch a run in real time</h3>
+<pre><code class="language-bash">gh run watch
+gh run watch 1234567890
+</code></pre>
+<h3 id="re-run-a-workflow">Re-run a workflow</h3>
+<pre><code class="language-bash">gh run rerun 1234567890
+gh run rerun 1234567890 --failed-only   # only re-run failed jobs
+</code></pre>
+<h3 id="cancel-or-delete-a-run">Cancel or delete a run</h3>
+<pre><code class="language-bash">gh run cancel 1234567890
+gh run delete 1234567890
+</code></pre>
+<h3 id="download-artifacts">Download artifacts</h3>
+<pre><code class="language-bash">gh run download 1234567890
+gh run download 1234567890 --name my-artifact --dir ./artifacts
+</code></pre>
+<h3 id="manage-workflow-files">Manage workflow files</h3>
+<pre><code class="language-bash">gh workflow list
+gh workflow view ci.yml
+gh workflow disable ci.yml
+gh workflow enable ci.yml
+</code></pre>
+<hr />
+<h2 id="searching-github">Searching GitHub</h2>
+<pre><code class="language-bash"># Search repositories {#search-repositories}
+gh search repos &quot;http scanner&quot; --language python --stars &quot;&gt;50&quot; --limit 20
+
+# Search issues and PRs {#search-issues-and-prs}
+gh search issues &quot;memory leak&quot; --repo owner/repo --label bug --state open
+gh search prs &quot;refactor&quot; --author alice --state merged
+
+# Search commits {#search-commits}
+gh search commits &quot;fix overflow&quot; --repo owner/repo
+
+# Search code {#search-code}
+gh search code &quot;WScript.Shell&quot; --language vbscript --owner myorg
+</code></pre>
+<p>Output can be piped through <code>--json</code> and <code>--jq</code>:</p>
+<pre><code class="language-bash">gh search repos &quot;network tool&quot; --json name,url --jq '.[].url'
+</code></pre>
+<hr />
+<h2 id="managing-secrets-and-variables">Managing secrets and variables</h2>
+<h3 id="secrets-encrypted-write-only">Secrets (encrypted, write-only)</h3>
+<pre><code class="language-bash"># Set interactively (prompts for value) {#set-interactively-prompts-for-value}
+gh secret set API_KEY
+
+# Set from a string {#set-from-a-string}
+gh secret set API_KEY --body &quot;mysecretvalue&quot;
+
+# Set from a file {#set-from-a-file}
+gh secret set CERT --body &quot;$(cat cert.pem)&quot;
+
+# Organization-level secret {#organization-level-secret}
+gh secret set SHARED_TOKEN --org myorg --visibility selected
+
+# Environment secret {#environment-secret}
+gh secret set PROD_KEY --env production
+
+gh secret list
+gh secret delete API_KEY
+</code></pre>
+<h3 id="variables-plaintext-readable">Variables (plaintext, readable)</h3>
+<pre><code class="language-bash">gh variable set APP_ENV --body &quot;production&quot;
+gh variable set LOG_LEVEL --body &quot;info&quot; --env staging
+gh variable get APP_ENV
+gh variable list
+gh variable delete APP_ENV
+</code></pre>
+<hr />
+<h2 id="aliases-building-your-own-shortcuts">Aliases: building your own shortcuts</h2>
+<p>Aliases let you define shorthand for long or frequently-used commands.</p>
+<pre><code class="language-bash"># Simple alias {#simple-alias}
+gh alias set pv 'pr view'
+
+# Alias with flags {#alias-with-flags}
+gh alias set myissues 'issue list --assignee @me --state open'
+
+# Alias with a shell expression (use ! prefix) {#alias-with-a-shell-expression-use-prefix}
+gh alias set pr-clean '!gh pr list --state merged --json number --jq &quot;.[].number&quot; | xargs -I{} gh pr delete {}'
+
+gh alias list
+gh alias delete pv
+</code></pre>
+<p>Aliases are stored in <code>~/.config/gh/config.yml</code> and can be exported/imported with <code>gh alias import</code>.</p>
+<hr />
+<h2 id="the-api-command">The API command</h2>
+<p><code>gh api</code> gives you direct access to the GitHub REST and GraphQL APIs, authenticated automatically.</p>
+<h3 id="rest-examples">REST examples</h3>
+<pre><code class="language-bash"># GET {#get}
+gh api repos/owner/repo
+
+# POST {#post}
+gh api -X POST repos/owner/repo/issues \
+  --field title=&quot;New issue&quot; \
+  --field body=&quot;Description&quot;
+
+# PATCH {#patch}
+gh api -X PATCH repos/owner/repo/issues/42 \
+  --field state=closed
+
+# Paginate all results {#paginate-all-results}
+gh api repos/owner/repo/issues --paginate
+
+# Filter with jq {#filter-with-jq}
+gh api repos/owner/repo/releases --jq '.[0].tag_name'
+</code></pre>
+<h3 id="graphql-example">GraphQL example</h3>
+<pre><code class="language-bash">gh api graphql -f query='
+  query {
+    viewer {
+      login
+      repositories(first: 5, orderBy: {field: UPDATED_AT, direction: DESC}) {
+        nodes { name }
+      }
+    }
+  }
+'
+</code></pre>
+<hr />
+<h2 id="extensions">Extensions</h2>
+<p>Extensions add new subcommands to <code>gh</code>. They are community-built executables prefixed with <code>gh-</code>.</p>
+<pre><code class="language-bash"># Browse and discover extensions {#browse-and-discover-extensions}
+gh extension search
+gh extension browse
+
+# Install {#install}
+gh extension install dlvhdr/gh-dash        # a PR/issue dashboard
+gh extension install nicokosi/gh-org-stats
+
+# Use {#use}
+gh dash
+
+# Manage {#manage}
+gh extension list
+gh extension upgrade gh-dash
+gh extension remove gh-dash
+</code></pre>
+<hr />
+<h2 id="shell-completion">Shell completion</h2>
+<p>Enable tab completion so you can press <code>&lt;Tab&gt;</code> to complete <code>gh</code> commands and flags.</p>
+<pre><code class="language-bash"># Bash (add to ~/.bashrc) {#bash-add-to-bashrc}
+eval &quot;$(gh completion -s bash)&quot;
+
+# Zsh (add to ~/.zshrc) {#zsh-add-to-zshrc}
+eval &quot;$(gh completion -s zsh)&quot;
+
+# Fish {#fish}
+gh completion -s fish &gt; ~/.config/fish/completions/gh.fish
+
+# PowerShell (add to $PROFILE) {#powershell-add-to-profile}
+gh completion -s powershell | Out-String | Invoke-Expression
+</code></pre>
+<hr />
+<h2 id="github-enterprise">GitHub Enterprise</h2>
+<p>If your organization uses GitHub Enterprise Server:</p>
+<pre><code class="language-bash"># Authenticate {#authenticate}
+gh auth login --hostname github.mycompany.com
+
+# Make the host the default for all commands {#make-the-host-the-default-for-all-commands}
+export GH_HOST=github.mycompany.com
+
+# Non-interactive (CI/CD, scripts) {#non-interactive-cicd-scripts}
+export GH_ENTERPRISE_TOKEN=ghes_xxxxxxxxxxxxxxxxxxxxxxxx
+</code></pre>
+<p>All <code>gh</code> commands work identically against an Enterprise instance. Supported from GitHub Enterprise Server 2.20 onwards.</p>
+<hr />
+<h2 id="tips-and-tricks">Tips and tricks</h2>
+<h3 id="open-anything-in-the-browser">Open anything in the browser</h3>
+<pre><code class="language-bash">gh browse             # repository
+gh browse 42          # issue or PR
+gh browse --settings  # repository settings page
+</code></pre>
+<h3 id="check-your-overall-status-across-all-repositories">Check your overall status across all repositories</h3>
+<pre><code class="language-bash">gh status
+</code></pre>
+<h3 id="use---json---jq-for-scripting">Use <code>--json</code> + <code>--jq</code> for scripting</h3>
+<pre><code class="language-bash"># Get the number of the latest open PR {#get-the-number-of-the-latest-open-pr}
+gh pr list --state open --json number --jq '.[0].number'
+
+# Extract all issue titles as a plain list {#extract-all-issue-titles-as-a-plain-list}
+gh issue list --json title --jq '.[].title'
+</code></pre>
+<h3 id="get-a-token-for-use-in-scripts">Get a token for use in scripts</h3>
+<pre><code class="language-bash">TOKEN=$(gh auth token)
+curl -H &quot;Authorization: Bearer $TOKEN&quot; https://api.github.com/user
+</code></pre>
+<h3 id="set-the-default-repository-in-a-directory">Set the default repository in a directory</h3>
+<pre><code class="language-bash">gh repo set-default owner/repo
+</code></pre>
+<p>After this, all <code>gh</code> commands run from that directory target <code>owner/repo</code> without needing <code>--repo</code>.</p>
+<h3 id="get-help-for-any-command">Get help for any command</h3>
+<pre><code class="language-bash">gh help
+gh pr --help
+gh release create --help
+</code></pre>
+<hr />
+<p><em>Source: https://cli.github.com/manual/ — GitHub CLI is open source under the MIT License.</em></p>
+  </main>
+</div>
+
+<footer class="site-footer">
+  GitHub CLI Manual &mdash; Source: cli.github.com/manual &mdash; MIT License &mdash; NetDTL Suite &mdash; didiermorandi.com/netdtl
+</footer>
+
+<script>
+(function(){
+  var links = document.querySelectorAll('.sidebar nav a');
+  var headings = [];
+  links.forEach(function(a){
+    var id = a.getAttribute('href');
+    if(id && id.charAt(0)==='#'){
+      var el = document.getElementById(id.slice(1));
+      if(el) headings.push({el:el,a:a});
+    }
+  });
+  function onScroll(){
+    var scroll = window.scrollY + 80;
+    var cur = null;
+    for(var i=0;i<headings.length;i++){
+      if(headings[i].el.offsetTop <= scroll) cur = headings[i];
+    }
+    links.forEach(function(a){a.classList.remove('active')});
+    if(cur) cur.a.classList.add('active');
+  }
+  window.addEventListener('scroll',onScroll,{passive:true});
+  onScroll();
+})();
+</script>
+</body>
+</html>
