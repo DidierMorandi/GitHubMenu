@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>gh CLI Guide de l'utilisateur — NetDTL Suite</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:#090d12;color:#c9d1d9;font-family:"IBM Plex Sans","Segoe UI",Arial,sans-serif;font-size:15px;line-height:1.7;display:flex;flex-direction:column;min-height:100vh}
+a{color:#58a6ff;text-decoration:none}
+a:hover{text-decoration:underline}
+.site-header{background:#161b22;border-bottom:1px solid #30363d;padding:0 32px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.site-header .logo{font-family:"IBM Plex Mono",monospace;font-size:14px;color:#00ff00;letter-spacing:.06em}
+.site-header .subtitle{font-size:11px;color:#444c56;letter-spacing:.08em}
+.layout{display:flex;flex:1;width:100%;margin:0 auto}
+.sidebar{width:260px;min-width:260px;background:#0a0d10;border-right:1px solid #21262d;padding:24px 0 40px;position:sticky;top:52px;height:calc(100vh - 52px);overflow-y:auto;flex-shrink:0}
+.sidebar::-webkit-scrollbar{width:4px}
+.sidebar::-webkit-scrollbar-thumb{background:#30363d}
+.sidebar-title{font-family:"IBM Plex Mono",monospace;font-size:10px;color:#444c56;letter-spacing:.1em;text-transform:uppercase;padding:0 20px 12px;border-bottom:1px solid #21262d;margin-bottom:12px}
+.sidebar nav a{display:block;padding:5px 20px;font-size:13px;color:#8b949e;border-left:2px solid transparent;transition:color .12s,border-color .12s,background .12s}
+.sidebar nav a:hover{color:#c9d1d9;background:rgba(88,166,255,.06);text-decoration:none}
+.sidebar nav a.active{color:#58a6ff;border-left-color:#58a6ff;background:rgba(88,166,255,.08)}
+.sidebar nav a.h3{padding-left:34px;font-size:12px;color:#444c56}
+.sidebar nav a.h3:hover{color:#8b949e}
+.sidebar nav a.h3.active{color:#58a6ff;border-left-color:#58a6ff}
+.content{flex:1;padding:40px 48px 80px;min-width:0;background:#0d1117}
+.content h1{font-family:"IBM Plex Mono",monospace;font-size:24px;color:#00ff00;border-bottom:1px solid #21262d;padding-bottom:12px;margin-bottom:28px;letter-spacing:.03em}
+.content h2{font-family:"IBM Plex Mono",monospace;font-size:17px;color:#58a6ff;margin:40px 0 14px;padding-bottom:6px;border-bottom:1px solid #21262d;letter-spacing:.02em}
+.content h3{font-family:"IBM Plex Mono",monospace;font-size:14px;color:#e6edf3;margin:28px 0 10px}
+.content h4{font-family:"IBM Plex Mono",monospace;font-size:13px;color:#8b949e;margin:20px 0 8px;text-transform:uppercase;letter-spacing:.06em}
+.content p{margin:0 0 14px}
+.content ul,.content ol{margin:0 0 14px 24px}
+.content li{margin-bottom:4px}
+.content hr{border:none;border-top:1px solid #21262d;margin:32px 0}
+.content blockquote{border-left:3px solid #58a6ff;background:#0a0d10;padding:10px 16px;margin:0 0 14px;color:#8b949e;font-size:13px}
+code{font-family:"IBM Plex Mono","Courier New",monospace;font-size:13px;background:#0a0d10;color:#00ff00;padding:1px 5px;border-radius:3px;border:1px solid #21262d}
+pre{background:#0a0d10;border:1px solid #21262d;border-left:3px solid #58a6ff;border-radius:0 4px 4px 0;padding:16px 18px;overflow-x:auto;margin:0 0 18px}
+pre code{background:transparent;border:none;padding:0;font-size:13px;color:#58a6ff;line-height:1.8}
+table{width:100%;border-collapse:collapse;margin:0 0 18px;font-size:13px}
+th{background:#161b22;color:#58a6ff;font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.04em;text-align:left;padding:8px 12px;border:1px solid #21262d}
+td{padding:7px 12px;border:1px solid #21262d;color:#c9d1d9;vertical-align:top}
+tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+td code{font-size:12px}
+.site-footer{background:#161b22;border-top:1px solid #30363d;padding:14px 32px;font-size:11px;color:#444c56;text-align:center;letter-spacing:.04em}
+@media(max-width:900px){.sidebar{display:none}.content{padding:24px 20px 60px}}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <span class="logo">NetDTL Suite &bull; gh CLI &bull; Guide de l'utilisateur</span>
+  <span class="subtitle">DEC VT100 TRIBUTE &bull; didiermorandi.com/netdtl</span>
+</header>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-title">Sommaire</div>
+    <nav>
+  <a href="#table-des-matieres" class="">Table des matières</a>
+  <a href="#quest-ce-que-gh" class="">Qu'est-ce que gh ?</a>
+  <a href="#installation" class="">Installation</a>
+  <a href="#configuration-initiale" class="">Configuration initiale</a>
+  <a href="#sauthentifier" class="h3">S'authentifier</a>
+  <a href="#definir-lediteur-prefere" class="h3">Définir l'éditeur préféré</a>
+  <a href="#definir-le-protocole-git-par-defaut" class="h3">Définir le protocole Git par défaut</a>
+  <a href="#travailler-avec-les-depots" class="">Travailler avec les dépôts</a>
+  <a href="#cloner-un-depot" class="h3">Cloner un dépôt</a>
+  <a href="#creer-un-nouveau-depot" class="h3">Créer un nouveau dépôt</a>
+  <a href="#afficher-les-informations-dun-depot" class="h3">Afficher les informations d'un dépôt</a>
+  <a href="#forker-un-depot" class="h3">Forker un dépôt</a>
+  <a href="#synchroniser-un-fork-avec-lupstream" class="h3">Synchroniser un fork avec l'upstream</a>
+  <a href="#modifier-les-parametres-dun-depot" class="h3">Modifier les paramètres d'un dépôt</a>
+  <a href="#lister-les-depots" class="h3">Lister les dépôts</a>
+  <a href="#travailler-avec-les-pull-requests" class="">Travailler avec les pull requests</a>
+  <a href="#creer-une-pull-request" class="h3">Créer une pull request</a>
+  <a href="#lister-et-filtrer-les-pull-requests" class="h3">Lister et filtrer les pull requests</a>
+  <a href="#afficher-une-pull-request" class="h3">Afficher une pull request</a>
+  <a href="#extraire-une-pull-request-localement" class="h3">Extraire une pull request localement</a>
+  <a href="#reviser-une-pull-request" class="h3">Réviser une pull request</a>
+  <a href="#verifier-le-statut-ci" class="h3">Vérifier le statut CI</a>
+  <a href="#fusionner-une-pull-request" class="h3">Fusionner une pull request</a>
+  <a href="#autres-operations-sur-les-pr" class="h3">Autres opérations sur les PR</a>
+  <a href="#tableau-de-bord-vos-pr-en-un-coup-dil" class="h3">Tableau de bord : vos PR en un coup d'œil</a>
+  <a href="#travailler-avec-les-issues" class="">Travailler avec les issues</a>
+  <a href="#creer-une-issue" class="h3">Créer une issue</a>
+  <a href="#lister-et-filtrer-les-issues" class="h3">Lister et filtrer les issues</a>
+  <a href="#afficher-une-issue" class="h3">Afficher une issue</a>
+  <a href="#commenter-une-issue" class="h3">Commenter une issue</a>
+  <a href="#fermer-ou-rouvrir" class="h3">Fermer ou rouvrir</a>
+  <a href="#modifier-epingler-transferer" class="h3">Modifier, épingler, transférer</a>
+  <a href="#creer-une-branche-de-developpement-depuis-une-issue" class="h3">Créer une branche de développement depuis une issue</a>
+  <a href="#tableau-de-bord" class="h3">Tableau de bord</a>
+  <a href="#travailler-avec-les-releases" class="">Travailler avec les releases</a>
+  <a href="#creer-une-release" class="h3">Créer une release</a>
+  <a href="#lister-et-afficher-les-releases" class="h3">Lister et afficher les releases</a>
+  <a href="#telecharger-les-assets-dune-release" class="h3">Télécharger les assets d'une release</a>
+  <a href="#uploader-des-assets-supplementaires" class="h3">Uploader des assets supplémentaires</a>
+  <a href="#modifier-ou-supprimer-une-release" class="h3">Modifier ou supprimer une release</a>
+  <a href="#travailler-avec-github-actions" class="">Travailler avec GitHub Actions</a>
+  <a href="#declencher-un-workflow-manuellement" class="h3">Déclencher un workflow manuellement</a>
+  <a href="#lister-et-afficher-les-executions-de-workflow" class="h3">Lister et afficher les exécutions de workflow</a>
+  <a href="#suivre-une-execution-en-temps-reel" class="h3">Suivre une exécution en temps réel</a>
+  <a href="#relancer-un-workflow" class="h3">Relancer un workflow</a>
+  <a href="#annuler-ou-supprimer-une-execution" class="h3">Annuler ou supprimer une exécution</a>
+  <a href="#telecharger-des-artifacts" class="h3">Télécharger des artifacts</a>
+  <a href="#gerer-les-fichiers-de-workflow" class="h3">Gérer les fichiers de workflow</a>
+  <a href="#rechercher-sur-github" class="">Rechercher sur GitHub</a>
+  <a href="#gerer-les-secrets-et-les-variables" class="">Gérer les secrets et les variables</a>
+  <a href="#secrets-chiffres-en-ecriture-seule" class="h3">Secrets (chiffrés, en écriture seule)</a>
+  <a href="#variables-en-clair-lisibles" class="h3">Variables (en clair, lisibles)</a>
+  <a href="#alias-creer-ses-propres-raccourcis" class="">Alias : créer ses propres raccourcis</a>
+  <a href="#la-commande-api" class="">La commande API</a>
+  <a href="#exemples-rest" class="h3">Exemples REST</a>
+  <a href="#exemple-graphql" class="h3">Exemple GraphQL</a>
+  <a href="#extensions" class="">Extensions</a>
+  <a href="#completion-shell" class="">Complétion shell</a>
+  <a href="#github-enterprise" class="">GitHub Enterprise</a>
+  <a href="#astuces-et-conseils" class="">Astuces et conseils</a>
+  <a href="#ouvrir-nimporte-quoi-dans-le-navigateur" class="h3">Ouvrir n'importe quoi dans le navigateur</a>
+  <a href="#verifier-son-statut-global-sur-tous-les-depots" class="h3">Vérifier son statut global sur tous les dépôts</a>
+  <a href="#utiliser---json---jq-pour-les-scripts" class="h3">Utiliser --json + --jq pour les scripts</a>
+  <a href="#obtenir-un-token-pour-lutiliser-dans-des-scripts" class="h3">Obtenir un token pour l'utiliser dans des scripts</a>
+  <a href="#definir-le-depot-par-defaut-dans-un-repertoire" class="h3">Définir le dépôt par défaut dans un répertoire</a>
+  <a href="#obtenir-de-laide-pour-nimporte-quelle-commande" class="h3">Obtenir de l'aide pour n'importe quelle commande</a>
+</nav>
+
+  </aside>
+  <main class="content">
+    <h1 id="github-cli-gh-guide-de-lutilisateur">GitHub CLI (<code>gh</code>) — Guide de l'utilisateur</h1>
+<blockquote>
+<p>Introduction pratique à <code>gh</code> pour le travail quotidien avec GitHub.</p>
+</blockquote>
+<hr />
+<h2 id="table-des-matieres">Table des matières</h2>
+<ol>
+<li><a href="#quest-ce-que-gh">Qu'est-ce que <code>gh</code> ?</a></li>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#configuration-initiale">Configuration initiale</a></li>
+<li><a href="#travailler-avec-les-depots">Travailler avec les dépôts</a></li>
+<li><a href="#travailler-avec-les-pull-requests">Travailler avec les pull requests</a></li>
+<li><a href="#travailler-avec-les-issues">Travailler avec les issues</a></li>
+<li><a href="#travailler-avec-les-releases">Travailler avec les releases</a></li>
+<li><a href="#travailler-avec-github-actions">Travailler avec GitHub Actions</a></li>
+<li><a href="#rechercher-sur-github">Rechercher sur GitHub</a></li>
+<li><a href="#gerer-les-secrets-et-les-variables">Gérer les secrets et les variables</a></li>
+<li><a href="#alias-creer-ses-propres-raccourcis">Alias : créer ses propres raccourcis</a></li>
+<li><a href="#la-commande-api">La commande API</a></li>
+<li><a href="#extensions">Extensions</a></li>
+<li><a href="#completion-shell">Complétion shell</a></li>
+<li><a href="#github-enterprise">GitHub Enterprise</a></li>
+<li><a href="#astuces-et-conseils">Astuces et conseils</a></li>
+</ol>
+<hr />
+<h2 id="quest-ce-que-gh">Qu'est-ce que <code>gh</code> ?</h2>
+<p><code>gh</code> est la CLI officielle de GitHub. Au lieu de passer du terminal au navigateur, vous pouvez créer des pull requests, réviser du code, soumettre des issues, déclencher des workflows et gérer des releases — sans quitter la ligne de commande.</p>
+<p><code>gh</code> complète <code>git</code> : là où <code>git</code> gère le contrôle de version local, <code>gh</code> prend en charge les aspects spécifiques à GitHub (remotes, pull requests, Actions, etc.).</p>
+<hr />
+<h2 id="installation">Installation</h2>
+<p>Suivez les instructions pour votre plateforme : https://github.com/cli/cli#installation</p>
+<p>Options rapides :</p>
+<pre><code class="language-bash"># macOS (Homebrew) {#macos-homebrew}
+brew install gh
+
+# Windows (winget) {#windows-winget}
+winget install GitHub.cli
+
+# Ubuntu / Debian {#ubuntu-debian}
+sudo apt install gh
+
+# Vérifier l'installation {#verifier-linstallation}
+gh --version
+</code></pre>
+<hr />
+<h2 id="configuration-initiale">Configuration initiale</h2>
+<h3 id="sauthentifier">S'authentifier</h3>
+<pre><code class="language-bash">gh auth login
+</code></pre>
+<p>L'assistant interactif demande :</p>
+<ul>
+<li>Type de compte : <strong>GitHub.com</strong> ou <strong>GitHub Enterprise Server</strong></li>
+<li>Protocole : <strong>HTTPS</strong> (recommandé pour la plupart des utilisateurs) ou <strong>SSH</strong></li>
+<li>Méthode d'authentification : flux navigateur ou saisie d'un token</li>
+</ul>
+<p>Après la connexion, vérifier que tout fonctionne :</p>
+<pre><code class="language-bash">gh auth status
+</code></pre>
+<h3 id="definir-lediteur-prefere">Définir l'éditeur préféré</h3>
+<pre><code class="language-bash">gh config set editor &quot;code --wait&quot;   # VS Code
+gh config set editor vim
+gh config set editor notepad         # Windows
+</code></pre>
+<h3 id="definir-le-protocole-git-par-defaut">Définir le protocole Git par défaut</h3>
+<pre><code class="language-bash">gh config set git_protocol ssh       # utiliser SSH pour les clones
+gh config set git_protocol https     # utiliser HTTPS
+</code></pre>
+<hr />
+<h2 id="travailler-avec-les-depots">Travailler avec les dépôts</h2>
+<h3 id="cloner-un-depot">Cloner un dépôt</h3>
+<pre><code class="language-bash">gh repo clone owner/repo
+gh repo clone owner/repo -- --depth 1   # clone superficiel
+</code></pre>
+<h3 id="creer-un-nouveau-depot">Créer un nouveau dépôt</h3>
+<pre><code class="language-bash"># Assistant interactif {#assistant-interactif}
+gh repo create
+
+# Entièrement spécifié {#entierement-specifie}
+gh repo create mon-projet --public --description &quot;Mon nouveau projet&quot; --clone
+gh repo create mon-projet --private --source=. --push
+</code></pre>
+<h3 id="afficher-les-informations-dun-depot">Afficher les informations d'un dépôt</h3>
+<pre><code class="language-bash">gh repo view                   # dépôt courant
+gh repo view owner/repo        # n'importe quel dépôt
+gh repo view --web             # ouvrir dans le navigateur
+</code></pre>
+<h3 id="forker-un-depot">Forker un dépôt</h3>
+<pre><code class="language-bash">gh repo fork owner/repo --clone
+</code></pre>
+<h3 id="synchroniser-un-fork-avec-lupstream">Synchroniser un fork avec l'upstream</h3>
+<pre><code class="language-bash">gh repo sync                   # synchroniser le fork courant avec l'upstream
+gh repo sync --branch main
+</code></pre>
+<h3 id="modifier-les-parametres-dun-depot">Modifier les paramètres d'un dépôt</h3>
+<pre><code class="language-bash">gh repo edit --description &quot;Description mise à jour&quot;
+gh repo edit --visibility private
+gh repo edit --enable-issues=false
+gh repo edit --add-topic cli --add-topic automatisation
+</code></pre>
+<h3 id="lister-les-depots">Lister les dépôts</h3>
+<pre><code class="language-bash">gh repo list
+gh repo list monorg --limit 50
+gh repo list --language python --source
+</code></pre>
+<hr />
+<h2 id="travailler-avec-les-pull-requests">Travailler avec les pull requests</h2>
+<p>Les pull requests sont au cœur de <code>gh</code>. Les commandes ci-dessous couvrent l'ensemble du cycle de vie.</p>
+<h3 id="creer-une-pull-request">Créer une pull request</h3>
+<pre><code class="language-bash"># Interactif (détecte votre branche et les commits récents) {#interactif-detecte-votre-branche-et-les-commits-recents}
+gh pr create
+
+# Entièrement spécifié {#entierement-specifie}
+gh pr create \
+  --title &quot;Correction timeout connexion&quot; \
+  --body &quot;Fixes #42. Augmente le timeout de session à 30 minutes.&quot; \
+  --base main \
+  --head fix/timeout-connexion \
+  --reviewer alice,bob \
+  --assignee @me \
+  --label bug
+</code></pre>
+<p>Pour ouvrir l'éditeur pour le corps :</p>
+<pre><code class="language-bash">gh pr create --fill   # préremplir depuis les commits, ouvrir l'éditeur pour relecture
+</code></pre>
+<h3 id="lister-et-filtrer-les-pull-requests">Lister et filtrer les pull requests</h3>
+<pre><code class="language-bash">gh pr list
+gh pr list --state open
+gh pr list --assignee @me
+gh pr list --label &quot;en attente de revue&quot;
+gh pr list --draft
+gh pr list --base main
+</code></pre>
+<h3 id="afficher-une-pull-request">Afficher une pull request</h3>
+<pre><code class="language-bash">gh pr view              # PR de la branche courante
+gh pr view 321
+gh pr view 321 --web    # ouvrir dans le navigateur
+</code></pre>
+<h3 id="extraire-une-pull-request-localement">Extraire une pull request localement</h3>
+<pre><code class="language-bash">gh pr checkout 321
+</code></pre>
+<p>Cette commande crée une branche de suivi locale et y bascule.</p>
+<h3 id="reviser-une-pull-request">Réviser une pull request</h3>
+<pre><code class="language-bash">gh pr review 321 --approve
+gh pr review 321 --request-changes --body &quot;Merci d'ajouter des tests.&quot;
+gh pr review 321 --comment --body &quot;Globalement bien.&quot;
+</code></pre>
+<h3 id="verifier-le-statut-ci">Vérifier le statut CI</h3>
+<pre><code class="language-bash">gh pr checks 321
+gh pr checks 321 --watch   # mise à jour en direct jusqu'à la fin de toutes les vérifications
+</code></pre>
+<h3 id="fusionner-une-pull-request">Fusionner une pull request</h3>
+<pre><code class="language-bash">gh pr merge 321 --merge             # commit de fusion
+gh pr merge 321 --squash            # squash et fusion
+gh pr merge 321 --rebase            # rebase et fusion
+gh pr merge 321 --squash --delete-branch --auto   # fusion automatique quand les vérifications passent
+</code></pre>
+<h3 id="autres-operations-sur-les-pr">Autres opérations sur les PR</h3>
+<pre><code class="language-bash">gh pr diff 321                    # afficher le diff
+gh pr edit 321 --title &quot;Nouveau titre&quot; --add-label &quot;prêt&quot;
+gh pr ready 321                   # convertir un draft en prêt pour revue
+gh pr close 321 --comment &quot;Remplacée par #400&quot;
+gh pr reopen 321
+gh pr lock 321 --reason resolved
+gh pr update-branch 321           # mettre à jour avec la branche de base
+gh pr revert 321                  # créer une PR de rollback
+</code></pre>
+<h3 id="tableau-de-bord-vos-pr-en-un-coup-dil">Tableau de bord : vos PR en un coup d'œil</h3>
+<pre><code class="language-bash">gh pr status
+</code></pre>
+<hr />
+<h2 id="travailler-avec-les-issues">Travailler avec les issues</h2>
+<h3 id="creer-une-issue">Créer une issue</h3>
+<pre><code class="language-bash">gh issue create
+gh issue create --title &quot;Crash sur Windows 11&quot; --label bug --assignee @me
+</code></pre>
+<h3 id="lister-et-filtrer-les-issues">Lister et filtrer les issues</h3>
+<pre><code class="language-bash">gh issue list
+gh issue list --state open --label bug
+gh issue list --assignee alice
+gh issue list --milestone &quot;v2.0&quot;
+</code></pre>
+<h3 id="afficher-une-issue">Afficher une issue</h3>
+<pre><code class="language-bash">gh issue view 42
+gh issue view 42 --web
+</code></pre>
+<h3 id="commenter-une-issue">Commenter une issue</h3>
+<pre><code class="language-bash">gh issue comment 42 --body &quot;Reproduit en 3.1. Enquête en cours.&quot;
+</code></pre>
+<h3 id="fermer-ou-rouvrir">Fermer ou rouvrir</h3>
+<pre><code class="language-bash">gh issue close 42
+gh issue close 42 --reason &quot;not planned&quot;
+gh issue reopen 42
+</code></pre>
+<h3 id="modifier-epingler-transferer">Modifier, épingler, transférer</h3>
+<pre><code class="language-bash">gh issue edit 42 --title &quot;Titre mis à jour&quot; --add-label enhancement
+gh issue pin 42
+gh issue transfer 42 owner/autre-depot
+</code></pre>
+<h3 id="creer-une-branche-de-developpement-depuis-une-issue">Créer une branche de développement depuis une issue</h3>
+<pre><code class="language-bash">gh issue develop 42 --name fix/crash-windows
+</code></pre>
+<p>Cette commande crée une branche liée à l'issue sur GitHub et l'extrait localement.</p>
+<h3 id="tableau-de-bord">Tableau de bord</h3>
+<pre><code class="language-bash">gh issue status
+</code></pre>
+<hr />
+<h2 id="travailler-avec-les-releases">Travailler avec les releases</h2>
+<h3 id="creer-une-release">Créer une release</h3>
+<pre><code class="language-bash"># Interactif {#interactif}
+gh release create v1.0.0
+
+# Entièrement spécifié, avec assets {#entierement-specifie-avec-assets}
+gh release create v1.0.0 \
+  --title &quot;Version 1.0.0&quot; \
+  --notes &quot;Première version stable.&quot; \
+  dist/MonApp.exe dist/MonApp-linux
+
+# Générer automatiquement les notes depuis les PR fusionnées {#generer-automatiquement-les-notes-depuis-les-pr-fusionnees}
+gh release create v1.0.0 --generate-notes
+</code></pre>
+<h3 id="lister-et-afficher-les-releases">Lister et afficher les releases</h3>
+<pre><code class="language-bash">gh release list
+gh release view v1.0.0
+gh release view --web
+</code></pre>
+<h3 id="telecharger-les-assets-dune-release">Télécharger les assets d'une release</h3>
+<pre><code class="language-bash">gh release download v1.0.0                        # tous les assets
+gh release download v1.0.0 --pattern &quot;*.exe&quot;      # filtré
+gh release download                                # dernière release
+</code></pre>
+<h3 id="uploader-des-assets-supplementaires">Uploader des assets supplémentaires</h3>
+<pre><code class="language-bash">gh release upload v1.0.0 nouvel-asset.zip
+</code></pre>
+<h3 id="modifier-ou-supprimer-une-release">Modifier ou supprimer une release</h3>
+<pre><code class="language-bash">gh release edit v1.0.0 --title &quot;Version 1.0.0 (correctif)&quot;
+gh release delete v1.0.0
+</code></pre>
+<hr />
+<h2 id="travailler-avec-github-actions">Travailler avec GitHub Actions</h2>
+<h3 id="declencher-un-workflow-manuellement">Déclencher un workflow manuellement</h3>
+<pre><code class="language-bash">gh workflow run ci.yml
+gh workflow run deploy.yml --ref main --field environment=staging
+</code></pre>
+<h3 id="lister-et-afficher-les-executions-de-workflow">Lister et afficher les exécutions de workflow</h3>
+<pre><code class="language-bash">gh run list
+gh run list --workflow ci.yml --limit 10
+gh run view 1234567890
+gh run view 1234567890 --log          # logs complets
+gh run view 1234567890 --log-failed   # logs des jobs en échec seulement
+</code></pre>
+<h3 id="suivre-une-execution-en-temps-reel">Suivre une exécution en temps réel</h3>
+<pre><code class="language-bash">gh run watch
+gh run watch 1234567890
+</code></pre>
+<h3 id="relancer-un-workflow">Relancer un workflow</h3>
+<pre><code class="language-bash">gh run rerun 1234567890
+gh run rerun 1234567890 --failed-only   # relancer seulement les jobs en échec
+</code></pre>
+<h3 id="annuler-ou-supprimer-une-execution">Annuler ou supprimer une exécution</h3>
+<pre><code class="language-bash">gh run cancel 1234567890
+gh run delete 1234567890
+</code></pre>
+<h3 id="telecharger-des-artifacts">Télécharger des artifacts</h3>
+<pre><code class="language-bash">gh run download 1234567890
+gh run download 1234567890 --name mon-artifact --dir ./artifacts
+</code></pre>
+<h3 id="gerer-les-fichiers-de-workflow">Gérer les fichiers de workflow</h3>
+<pre><code class="language-bash">gh workflow list
+gh workflow view ci.yml
+gh workflow disable ci.yml
+gh workflow enable ci.yml
+</code></pre>
+<hr />
+<h2 id="rechercher-sur-github">Rechercher sur GitHub</h2>
+<pre><code class="language-bash"># Rechercher des dépôts {#rechercher-des-depots}
+gh search repos &quot;scanner http&quot; --language python --stars &quot;&gt;50&quot; --limit 20
+
+# Rechercher des issues et des PR {#rechercher-des-issues-et-des-pr}
+gh search issues &quot;fuite mémoire&quot; --repo owner/repo --label bug --state open
+gh search prs &quot;refactor&quot; --author alice --state merged
+
+# Rechercher des commits {#rechercher-des-commits}
+gh search commits &quot;fix overflow&quot; --repo owner/repo
+
+# Rechercher du code {#rechercher-du-code}
+gh search code &quot;WScript.Shell&quot; --language vbscript --owner monorg
+</code></pre>
+<p>La sortie peut être filtrée via <code>--json</code> et <code>--jq</code> :</p>
+<pre><code class="language-bash">gh search repos &quot;outil réseau&quot; --json name,url --jq '.[].url'
+</code></pre>
+<hr />
+<h2 id="gerer-les-secrets-et-les-variables">Gérer les secrets et les variables</h2>
+<h3 id="secrets-chiffres-en-ecriture-seule">Secrets (chiffrés, en écriture seule)</h3>
+<pre><code class="language-bash"># Définir de manière interactive (demande la valeur) {#definir-de-maniere-interactive-demande-la-valeur}
+gh secret set CLE_API
+
+# Définir depuis une chaîne {#definir-depuis-une-chaine}
+gh secret set CLE_API --body &quot;mavaleursecrète&quot;
+
+# Définir depuis un fichier {#definir-depuis-un-fichier}
+gh secret set CERT --body &quot;$(cat cert.pem)&quot;
+
+# Secret au niveau de l'organisation {#secret-au-niveau-de-lorganisation}
+gh secret set TOKEN_PARTAGE --org monorg --visibility selected
+
+# Secret d'environnement {#secret-denvironnement}
+gh secret set CLE_PROD --env production
+
+gh secret list
+gh secret delete CLE_API
+</code></pre>
+<h3 id="variables-en-clair-lisibles">Variables (en clair, lisibles)</h3>
+<pre><code class="language-bash">gh variable set APP_ENV --body &quot;production&quot;
+gh variable set LOG_LEVEL --body &quot;info&quot; --env staging
+gh variable get APP_ENV
+gh variable list
+gh variable delete APP_ENV
+</code></pre>
+<hr />
+<h2 id="alias-creer-ses-propres-raccourcis">Alias : créer ses propres raccourcis</h2>
+<p>Les alias permettent de définir des abréviations pour les commandes longues ou fréquemment utilisées.</p>
+<pre><code class="language-bash"># Alias simple {#alias-simple}
+gh alias set pv 'pr view'
+
+# Alias avec flags {#alias-avec-flags}
+gh alias set mesissues 'issue list --assignee @me --state open'
+
+# Alias avec expression shell (préfixe !) {#alias-avec-expression-shell-prefixe}
+gh alias set pr-clean '!gh pr list --state merged --json number --jq &quot;.[].number&quot; | xargs -I{} gh pr delete {}'
+
+gh alias list
+gh alias delete pv
+</code></pre>
+<p>Les alias sont stockés dans <code>~/.config/gh/config.yml</code> et peuvent être exportés/importés avec <code>gh alias import</code>.</p>
+<hr />
+<h2 id="la-commande-api">La commande API</h2>
+<p><code>gh api</code> donne un accès direct aux API REST et GraphQL de GitHub, avec authentification automatique.</p>
+<h3 id="exemples-rest">Exemples REST</h3>
+<pre><code class="language-bash"># GET {#get}
+gh api repos/owner/repo
+
+# POST {#post}
+gh api -X POST repos/owner/repo/issues \
+  --field title=&quot;Nouvelle issue&quot; \
+  --field body=&quot;Description&quot;
+
+# PATCH {#patch}
+gh api -X PATCH repos/owner/repo/issues/42 \
+  --field state=closed
+
+# Paginer tous les résultats {#paginer-tous-les-resultats}
+gh api repos/owner/repo/issues --paginate
+
+# Filtrer avec jq {#filtrer-avec-jq}
+gh api repos/owner/repo/releases --jq '.[0].tag_name'
+</code></pre>
+<h3 id="exemple-graphql">Exemple GraphQL</h3>
+<pre><code class="language-bash">gh api graphql -f query='
+  query {
+    viewer {
+      login
+      repositories(first: 5, orderBy: {field: UPDATED_AT, direction: DESC}) {
+        nodes { name }
+      }
+    }
+  }
+'
+</code></pre>
+<hr />
+<h2 id="extensions">Extensions</h2>
+<p>Les extensions ajoutent de nouvelles sous-commandes à <code>gh</code>. Ce sont des exécutables communautaires préfixés par <code>gh-</code>.</p>
+<pre><code class="language-bash"># Parcourir et découvrir des extensions {#parcourir-et-decouvrir-des-extensions}
+gh extension search
+gh extension browse
+
+# Installer {#installer}
+gh extension install dlvhdr/gh-dash        # tableau de bord PR/issues
+gh extension install nicokosi/gh-org-stats
+
+# Utiliser {#utiliser}
+gh dash
+
+# Gérer {#gerer}
+gh extension list
+gh extension upgrade gh-dash
+gh extension remove gh-dash
+</code></pre>
+<hr />
+<h2 id="completion-shell">Complétion shell</h2>
+<p>Activer la complétion par tabulation pour compléter les commandes et flags <code>gh</code>.</p>
+<pre><code class="language-bash"># Bash (ajouter dans ~/.bashrc) {#bash-ajouter-dans-bashrc}
+eval &quot;$(gh completion -s bash)&quot;
+
+# Zsh (ajouter dans ~/.zshrc) {#zsh-ajouter-dans-zshrc}
+eval &quot;$(gh completion -s zsh)&quot;
+
+# Fish {#fish}
+gh completion -s fish &gt; ~/.config/fish/completions/gh.fish
+
+# PowerShell (ajouter dans $PROFILE) {#powershell-ajouter-dans-profile}
+gh completion -s powershell | Out-String | Invoke-Expression
+</code></pre>
+<hr />
+<h2 id="github-enterprise">GitHub Enterprise</h2>
+<p>Si votre organisation utilise GitHub Enterprise Server :</p>
+<pre><code class="language-bash"># S'authentifier {#sauthentifier}
+gh auth login --hostname github.masociete.com
+
+# Définir l'hôte par défaut pour toutes les commandes {#definir-lhote-par-defaut-pour-toutes-les-commandes}
+export GH_HOST=github.masociete.com
+
+# Non-interactif (CI/CD, scripts) {#non-interactif-cicd-scripts}
+export GH_ENTERPRISE_TOKEN=ghes_xxxxxxxxxxxxxxxxxxxxxxxx
+</code></pre>
+<p>Toutes les commandes <code>gh</code> fonctionnent de façon identique sur une instance Enterprise. Supporté à partir de GitHub Enterprise Server 2.20.</p>
+<hr />
+<h2 id="astuces-et-conseils">Astuces et conseils</h2>
+<h3 id="ouvrir-nimporte-quoi-dans-le-navigateur">Ouvrir n'importe quoi dans le navigateur</h3>
+<pre><code class="language-bash">gh browse             # dépôt
+gh browse 42          # issue ou PR
+gh browse --settings  # page de paramètres du dépôt
+</code></pre>
+<h3 id="verifier-son-statut-global-sur-tous-les-depots">Vérifier son statut global sur tous les dépôts</h3>
+<pre><code class="language-bash">gh status
+</code></pre>
+<h3 id="utiliser---json---jq-pour-les-scripts">Utiliser <code>--json</code> + <code>--jq</code> pour les scripts</h3>
+<pre><code class="language-bash"># Obtenir le numéro de la dernière PR ouverte {#obtenir-le-numero-de-la-derniere-pr-ouverte}
+gh pr list --state open --json number --jq '.[0].number'
+
+# Extraire tous les titres d'issues sous forme de liste simple {#extraire-tous-les-titres-dissues-sous-forme-de-liste-simple}
+gh issue list --json title --jq '.[].title'
+</code></pre>
+<h3 id="obtenir-un-token-pour-lutiliser-dans-des-scripts">Obtenir un token pour l'utiliser dans des scripts</h3>
+<pre><code class="language-bash">TOKEN=$(gh auth token)
+curl -H &quot;Authorization: Bearer $TOKEN&quot; https://api.github.com/user
+</code></pre>
+<h3 id="definir-le-depot-par-defaut-dans-un-repertoire">Définir le dépôt par défaut dans un répertoire</h3>
+<pre><code class="language-bash">gh repo set-default owner/repo
+</code></pre>
+<p>Après cette commande, toutes les commandes <code>gh</code> exécutées depuis ce répertoire ciblent <code>owner/repo</code> sans avoir besoin de <code>--repo</code>.</p>
+<h3 id="obtenir-de-laide-pour-nimporte-quelle-commande">Obtenir de l'aide pour n'importe quelle commande</h3>
+<pre><code class="language-bash">gh help
+gh pr --help
+gh release create --help
+</code></pre>
+<hr />
+<p><em>Source : https://cli.github.com/manual/ — GitHub CLI est open source sous licence MIT.</em></p>
+  </main>
+</div>
+<footer class="site-footer">
+  GitHub CLI Manuel &mdash; Source&nbsp;: cli.github.com/manual &mdash; Licence MIT &mdash; NetDTL Suite &mdash; didiermorandi.com/netdtl
+</footer>
+<script>
+(function(){
+  var links = document.querySelectorAll('.sidebar nav a');
+  var headings = [];
+  links.forEach(function(a){
+    var id = a.getAttribute('href');
+    if(id && id.charAt(0)==='#'){
+      var el = document.getElementById(id.slice(1));
+      if(el) headings.push({el:el,a:a});
+    }
+  });
+  function onScroll(){
+    var scroll = window.scrollY + 80;
+    var cur = null;
+    for(var i=0;i<headings.length;i++){
+      if(headings[i].el.offsetTop <= scroll) cur = headings[i];
+    }
+    links.forEach(function(a){a.classList.remove('active')});
+    if(cur) cur.a.classList.add('active');
+  }
+  window.addEventListener('scroll',onScroll,{passive:true});
+  onScroll();
+})();
+</script>
+</body>
+</html>
