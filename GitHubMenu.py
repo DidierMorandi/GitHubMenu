@@ -13,7 +13,7 @@ from tkinter import filedialog, messagebox, simpledialog
 
 APP_NAME = "GitHubMenu"
 APP_SUBTITLE = "GitHub simplifié avec gh"
-APP_VERSION = "v0.1.0"
+APP_VERSION = "v1.0-1"
 
 COLOR_BG = "#090d0f"
 COLOR_PANEL = "#12171b"
@@ -53,7 +53,7 @@ class GitHubMenuApp:
         self.command_label: tk.Label | None = None
         self.result_text: tk.Text | None = None
 
-        self.root.title(APP_NAME)
+        self.root.title(f"{APP_NAME} {APP_VERSION}")
         self.root.geometry("980x720")
         self.root.minsize(900, 640)
         self.root.configure(bg=COLOR_BG)
