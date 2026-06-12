@@ -13,7 +13,7 @@ from tkinter import filedialog, messagebox, simpledialog
 
 APP_NAME = "GitHubMenu"
 APP_SUBTITLE = "GitHub simplifié avec gh"
-APP_VERSION = "v1.0-2"
+APP_VERSION = "v1.0-4"
 
 COLOR_BG = "#090d0f"
 COLOR_PANEL = "#12171b"
@@ -38,11 +38,15 @@ CREATE_NO_WINDOW = 0x08000000 if os.name == "nt" else 0
 
 
 def app_dir() -> Path:
-    if getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS"):
-        return Path(sys._MEIPASS).resolve()
     if getattr(sys, "frozen", False):
         return Path(sys.executable).resolve().parent
     return Path(__file__).resolve().parent
+
+
+def repository_initial_dir(base_dir: Path) -> Path:
+    if base_dir.name.lower() == "dist":
+        return base_dir.parent.parent
+    return base_dir.parent
 
 
 class GitHubMenuApp:
@@ -230,7 +234,7 @@ class GitHubMenuApp:
     def choose_repository(self) -> None:
         folder = filedialog.askdirectory(
             title="Choisir le dossier local du dépôt GitHub",
-            initialdir=str(self.base_dir.parent),
+            initialdir=str(repository_initial_dir(self.base_dir)),
         )
         if not folder:
             return
