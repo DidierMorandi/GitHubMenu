@@ -13,7 +13,7 @@ from tkinter import filedialog, messagebox, simpledialog
 
 APP_NAME = "GitHubMenu"
 APP_SUBTITLE = "GitHub simplifié avec gh"
-APP_VERSION = "v1.0-4"
+APP_VERSION = "v1.0-5"
 
 COLOR_BG = "#090d0f"
 COLOR_PANEL = "#12171b"
@@ -47,6 +47,12 @@ def repository_initial_dir(base_dir: Path) -> Path:
     if base_dir.name.lower() == "dist":
         return base_dir.parent.parent
     return base_dir.parent
+
+
+def documentation_dir(base_dir: Path) -> Path:
+    if base_dir.name.lower() == "dist":
+        return base_dir.parent
+    return base_dir
 
 
 class GitHubMenuApp:
@@ -595,11 +601,12 @@ class GitHubMenuApp:
         )
 
     def show_documentation(self) -> None:
+        docs_dir = documentation_dir(self.base_dir)
         docs = [
-            ("Guide utilisateur", self.base_dir / "GitHubMenu_Guide_Utilisateur.html"),
-            ("Manuel de référence", self.base_dir / "GitHubMenu_Manuel_de_Reference.html"),
-            ("Guide gh existant", self.base_dir / "gh_User_Guide_en.html"),
-            ("Référence gh existante", self.base_dir / "gh_Reference_Manual_en.html"),
+            ("GitHubMenu Manuel de référence", docs_dir / "GitHubMenu_Manuel_de_Reference.html"),
+            ("GitHubMenu Guide utilisateur", docs_dir / "GitHubMenu_Guide_Utilisateur.html"),
+            ("gh Manuel de référence", docs_dir / "gh_Manuel_de_reference.html"),
+            ("gh Guide utilisateur", docs_dir / "gh_Guide_Utilisateur.html"),
         ]
 
         window = tk.Toplevel(self.root)
@@ -638,7 +645,7 @@ class GitHubMenuApp:
 
         tk.Button(
             window,
-            text="Documentation officielle GitHub CLI",
+            text="gh Documentation officielle",
             command=lambda: webbrowser.open("https://cli.github.com/manual/"),
             bg=COLOR_PANEL,
             fg=COLOR_TEXT,
