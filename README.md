@@ -1,65 +1,65 @@
 # GitHubMenu
 
-GitHubMenu est un menu graphique pour utiliser GitHub CLI (`gh`) sans retenir les syntaxes.
+GitHubMenu is a graphical menu for using GitHub CLI (`gh`) without having to remember command syntax.
 
-L'objectif est de parler le langage de l'utilisateur :
+Its goal is to speak the user's language:
 
-1. État GitHub
-2. Créer le dépôt GitHub à partir du `.git` local
-3. Publier une nouvelle version
-4. Télécharger une version
-5. Historique des versions
-6. Ouvrir le dépôt GitHub
-7. Voir les workflows
-8. Diagnostic GitHub
-9. Outils avancés
-10. Documentation du Père Claude
+1. GitHub status
+2. Create the GitHub repository from the local `.git`
+3. Publish a new version
+4. Download a version
+5. Version history
+6. Open the GitHub repository
+7. View workflows
+8. GitHub diagnostics
+9. Advanced tools
+10. Father Claude's documentation
 
-## Pré-requis
+## Requirements
 
-GitHubMenu utilise l'outil officiel GitHub CLI.
+GitHubMenu uses the official GitHub CLI tool.
 
-Installation Windows :
+Windows installation:
 
 ```powershell
 winget install GitHub.cli
 ```
 
-Après installation, ouvrez une nouvelle fenêtre Windows puis vérifiez :
+After installation, open a new Windows window and check:
 
 ```powershell
 gh --version
 gh auth login
 ```
 
-## Lancer l'outil
+## Run the tool
 
 ```powershell
 python GitHubMenu.py
 ```
 
-## Philosophie
+## Philosophy
 
-GitDTL accompagne les opérations Git locales.
+GitDTL helps with local Git operations.
 
-GitHubMenu accompagne les opérations GitHub :
+GitHubMenu helps with GitHub operations:
 
-- consulter l'état du dépôt GitHub ;
-- créer le dépôt GitHub distant depuis un dépôt Git local avant le premier push ;
-- publier une Release GitHub ;
-- télécharger une Release ;
-- consulter l'historique des versions ;
-- ouvrir le dépôt dans le navigateur ;
-- lire les workflows GitHub Actions ;
-- diagnostiquer les problèmes courants.
+- check the status of the GitHub repository;
+- create the remote GitHub repository from a local Git repository before the first push;
+- publish a GitHub Release;
+- download a Release;
+- view the version history;
+- open the repository in the browser;
+- read GitHub Actions workflows;
+- diagnose common problems.
 
 ## Documentation
 
-Le menu 9 ouvre la documentation du Père Claude.
+Menu 9 opens Father Claude's documentation.
 
-Deux manuels français sont prévus :
+Two French manuals are planned:
 
 - `GitHubMenu_Guide_Utilisateur.html`
 - `GitHubMenu_Manuel_de_Reference.html`
 
-Les fichiers `gh_User_Guide_en.html` et `gh_Reference_Manual_en.html` restent disponibles comme documentation technique de départ.
+The `gh_User_Guide_en.html` and `gh_Reference_Manual_en.html` files remain available as initial technical documentation.
