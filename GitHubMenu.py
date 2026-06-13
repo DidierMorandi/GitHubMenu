@@ -13,7 +13,7 @@ from tkinter import filedialog, messagebox, simpledialog
 
 APP_NAME = "GitHubMenu"
 APP_SUBTITLE = "GitHub simplifié avec gh"
-APP_VERSION = "v1.0-5"
+APP_VERSION = "v1.0-6"
 
 COLOR_BG = "#090d0f"
 COLOR_PANEL = "#12171b"
