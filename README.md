@@ -63,3 +63,19 @@ Two French manuals are planned:
 - `GitHubMenu_Manuel_de_Reference.html`
 
 The `gh_User_Guide_en.html` and `gh_Reference_Manual_en.html` files remain available as initial technical documentation.
+
+## Update - 14 June 2026
+
+The current code reports `APP_VERSION = "v1.0-6"` in `GitHubMenu.py`.
+
+New and confirmed behavior:
+
+- Local repository selection from the interface.
+- Checks for GitHub CLI availability and authentication.
+- GitHub repository creation from an existing local Git repository.
+- Release publication with title, notes, and attached files.
+- Release download through `gh release download --clobber`.
+- Release history and GitHub Actions workflow display.
+- GitHub diagnostic view combining status, releases, workflows, and likely problems.
+- Advanced tools: `gh auth status`, `gh repo sync`, Actions secrets list, `gh` configuration, and official documentation.
+- Local documentation is now available in French and English for GitHubMenu and `gh`.
