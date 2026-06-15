@@ -76,7 +76,7 @@ td code{font-size:12px}
   <a href="#gh-config-list" class="h3">gh config list</a>
   <a href="#gh-config-get-cle" class="h3">gh config get <clé></a>
   <a href="#gh-config-set-cle-valeur" class="h3">gh config set <clé> <valeur></a>
-  <a href="#gh-config-clear-cache" class="h3">gh config clear-cache</a>
+  <a href="#gh-config-clear-cache" class="h3">gh config cléar-caché</a>
   <a href="#reference-des-commandes" class="">Référence des commandes</a>
   <a href="#commandes-principales" class="h3">Commandes principales</a>
   <a href="#commandes-github-actions" class="h3">Commandes GitHub Actions</a>
@@ -126,7 +126,7 @@ td code{font-size:12px}
 <hr />
 <h2 id="authentification">Authentification</h2>
 <h3 id="gh-auth-login"><code>gh auth login</code></h3>
-<p>S'authentifier auprès de GitHub. Demande le type de compte (GitHub.com ou Enterprise), le protocole (HTTPS ou SSH) et l'éditeur préféré. Les identifiants sont stockés dans le trousseau système ou dans <code>~/.config/gh/hosts.yml</code>.</p>
+<p>S'authentifiér auprès de GitHub. Demande le type de compte (GitHub.com ou Enterprise), le protocole (HTTPS ou SSH) et l'éditeur préféré. Les identifiants sont stockés dans le trousseau système ou dans <code>~/.config/gh/hosts.yml</code>.</p>
 <pre><code class="language-bash">gh auth login
 gh auth login --hostname github.masociete.com
 gh auth login --with-token &lt; token.txt
@@ -145,7 +145,7 @@ gh auth logout --hostname github.masociete.com
 <pre><code class="language-bash">gh auth refresh --scopes read:org,write:packages
 </code></pre>
 <h3 id="gh-auth-setup-git"><code>gh auth setup-git</code></h3>
-<p>Configurer <code>git</code> pour utiliser <code>gh</code> comme assistant d'authentification.</p>
+<p>Configurer <code>git</code> pour utilisér <code>gh</code> comme assistant d'authentification.</p>
 <pre><code class="language-bash">gh auth setup-git
 </code></pre>
 <h3 id="gh-auth-switch"><code>gh auth switch</code></h3>
@@ -274,7 +274,7 @@ gh config set prompt disabled
 </code></pre>
 <p>Clés disponibles : <code>editor</code>, <code>git_protocol</code> (<code>https</code>/<code>ssh</code>), <code>prompt</code> (<code>enabled</code>/<code>disabled</code>), <code>pager</code>, <code>http_unix_socket</code>, <code>browser</code>.</p>
 <h3 id="gh-config-clear-cache"><code>gh config clear-cache</code></h3>
-<p>Vider le cache local des réponses HTTP.</p>
+<p>Vider le caché local des réponses HTTP.</p>
 <hr />
 <h2 id="reference-des-commandes">Référence des commandes</h2>
 <h3 id="commandes-principales">Commandes principales</h3>
@@ -315,7 +315,7 @@ gh config set prompt disabled
 </tr>
 <tr>
 <td><code>edit</code></td>
-<td>Modifier les paramètres du dépôt (description, visibilité, topics…)</td>
+<td>Modifier les paramètrès du dépôt (description, visibilité, topics…)</td>
 </tr>
 <tr>
 <td><code>delete</code></td>
@@ -752,7 +752,7 @@ gh run rerun 1234567890 --failed-only
 </tr>
 <tr>
 <td><code>run &lt;workflow&gt;</code></td>
-<td>Déclencher un workflow manuellement (<code>workflow_dispatch</code>)</td>
+<td>Décléncher un workflow manuellement (<code>workflow_dispatch</code>)</td>
 </tr>
 <tr>
 <td><code>enable &lt;workflow&gt;</code></td>
@@ -771,7 +771,7 @@ gh workflow run deploy.yml --field environment=production
 </code></pre>
 <hr />
 <h4 id="gh-cache"><code>gh cache</code></h4>
-<p>Gérer les entrées de cache Actions.</p>
+<p>Gérer les entrées de caché Actions.</p>
 <table>
 <thead>
 <tr>
@@ -782,11 +782,11 @@ gh workflow run deploy.yml --field environment=production
 <tbody>
 <tr>
 <td><code>list</code></td>
-<td>Lister les entrées de cache</td>
+<td>Lister les entrées de caché</td>
 </tr>
 <tr>
 <td><code>delete &lt;id&gt;</code></td>
-<td>Supprimer une entrée de cache</td>
+<td>Supprimer une entrée de caché</td>
 </tr>
 </tbody>
 </table>
