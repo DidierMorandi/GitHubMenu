@@ -14,6 +14,8 @@ Son objectif est de parler le langage de l'utilisateur :
 8. Diagnostic GitHub
 9. Outils avancés
 10. Documentation du Père Claude
+11. Committer tous les projets trouvés dans `/outils`
+12. Pousser tous les projets trouvés dans `/outils`
 
 ## Prérequis
 
@@ -51,11 +53,13 @@ GitHubMenu aide pour les opérations GitHub :
 - consulter l'historique des versions ;
 - ouvrir le dépôt dans le navigateur ;
 - lire les workflows GitHub Actions ;
-- diagnostiquer les problèmes courants.
+- diagnostiquer les problèmes courants ;
+- committer tous les projets Git trouvés dans `/outils` ;
+- pousser tous les projets Git trouvés dans `/outils`.
 
 ## Documentation
 
-Le menu 9 ouvre la documentation du Père Claude.
+Le menu 10 ouvre la documentation du Père Claude.
 
 Deux manuels français sont prévus :
 
@@ -64,9 +68,9 @@ Deux manuels français sont prévus :
 
 Les fichiers `gh_User_Guide_en.html` et `gh_Reference_Manual_en.html` restent disponibles comme documentation technique initiale.
 
-## Mise à jour - 14 juin 2026
+## Mise à jour - 16 juin 2026
 
-Le code courant annonce `APP_VERSION = "v1.0-6"` dans `GitHubMenu.py`.
+Le code courant annonce `APP_VERSION = "v1.0-7"` dans `GitHubMenu.py`.
 
 Nouveautés confirmées :
 
@@ -78,4 +82,5 @@ Nouveautés confirmées :
 - Historique des releases et affichage des workflows GitHub Actions.
 - Vue de diagnostic GitHub combinant statut, releases, workflows et problèmes probables.
 - Outils avancés : `gh auth status`, `gh repo sync`, liste des secrets Actions, configuration `gh` et documentation officielle.
+- Commit groupé et push groupé pour les projets Git trouvés dans `/outils`.
 - Documentation locale disponible en français et en anglais pour GitHubMenu et `gh`.

@@ -13,7 +13,7 @@ from tkinter import filedialog, messagebox, simpledialog
 
 APP_NAME = "GitHubMenu"
 APP_SUBTITLE = "GitHub simplifié avec gh"
-APP_VERSION = "v1.0-6"
+APP_VERSION = "v1.0-8"
 
 COLOR_BG = "#090d0f"
 COLOR_PANEL = "#12171b"
@@ -143,6 +143,8 @@ class GitHubMenuApp:
             ("8", "Diagnostic GitHub", self.show_github_diagnostic),
             ("9", "Outils avancés", self.show_advanced_tools),
             ("10", "Documentation du Père Claude", self.show_documentation),
+            ("11", "Committer tous les projets /outils", self.commit_all_tools_projects),
+            ("12", "Pousser tous les projets /outils", self.push_all_tools_projects),
             ("0", "Quitter", self.root.destroy),
         ]
 
@@ -300,6 +302,117 @@ class GitHubMenuApp:
             capture_output=True,
             creationflags=CREATE_NO_WINDOW,
         )
+
+    def tools_dir(self) -> Path:
+        if self.base_dir.name.lower() == "dist":
+            return self.base_dir.parent.parent
+        return self.base_dir.parent
+
+    def find_tools_repositories(self) -> list[Path]:
+        root = self.tools_dir()
+        repositories: list[Path] = []
+        if not root.exists():
+            return repositories
+
+        for current, dirnames, _filenames in os.walk(root):
+            current_path = Path(current)
+            if ".git" in dirnames:
+                repositories.append(current_path)
+                dirnames[:] = []
+                continue
+            dirnames[:] = [
+                dirname
+                for dirname in dirnames
+                if dirname not in {".git", "__pycache__", "build", "dist"}
+            ]
+
+        return sorted(repositories, key=lambda path: str(path).lower())
+
+    def commit_all_tools_projects(self) -> None:
+        repos = self.find_tools_repositories()
+        if not repos:
+            self.write_output(f"Aucun dépôt Git trouvé dans :\n{self.tools_dir()}")
+            return
+
+        message = simpledialog.askstring(
+            APP_NAME,
+            "Message de commit à utiliser pour tous les projets modifiés :",
+            initialvalue="Mise à jour",
+            parent=self.root,
+        )
+        if not message or not message.strip():
+            self.write_output("Commit groupé annulé.")
+            return
+        message = message.strip()
+
+        if not messagebox.askyesno(
+            APP_NAME,
+            f"GitHubMenu va committer les changements dans {len(repos)} projet(s) trouvé(s) dans /outils.\n\n"
+            "Continuer ?",
+        ):
+            self.write_output("Commit groupé annulé.")
+            return
+
+        lines = [f"Commit groupé des projets /outils\nDossier : {self.tools_dir()}\n"]
+        for repo in repos:
+            lines.append(f"--- {repo.name} ---")
+            status = self.run_git(["status", "--porcelain"], cwd=repo)
+            if status.returncode != 0:
+                lines.append(self.format_result("Statut Git", status))
+                continue
+            if not status.stdout.strip():
+                lines.append("Aucun changement à committer.\n")
+                continue
+
+            add = self.run_git(["add", "-A"], cwd=repo)
+            lines.append(self.format_result("Ajout des fichiers", add))
+            if add.returncode != 0:
+                continue
+
+            commit = self.run_git(["commit", "-m", message], cwd=repo)
+            lines.append(self.format_result("Commit", commit))
+
+        self.write_output("\n".join(lines))
+
+    def push_all_tools_projects(self) -> None:
+        repos = self.find_tools_repositories()
+        if not repos:
+            self.write_output(f"Aucun dépôt Git trouvé dans :\n{self.tools_dir()}")
+            return
+
+        if not messagebox.askyesno(
+            APP_NAME,
+            f"GitHubMenu va pousser {len(repos)} projet(s) trouvé(s) dans /outils.\n\n"
+            "Continuer ?",
+        ):
+            self.write_output("Push groupé annulé.")
+            return
+
+        lines = [f"Push groupé des projets /outils\nDossier : {self.tools_dir()}\n"]
+        for repo in repos:
+            lines.append(f"--- {repo.name} ---")
+            remote = self.run_git(["remote", "get-url", "origin"], cwd=repo)
+            if remote.returncode != 0 or not remote.stdout.strip():
+                lines.append("Aucun remote origin configuré.\n")
+                continue
+
+            branch = self.run_git(["branch", "--show-current"], cwd=repo)
+            branch_name = branch.stdout.strip()
+            if branch.returncode != 0 or not branch_name:
+                lines.append(self.format_result("Détection de la branche locale", branch))
+                continue
+
+            upstream = self.run_git(
+                ["rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}"],
+                cwd=repo,
+            )
+            if upstream.returncode == 0 and upstream.stdout.strip():
+                push = self.run_git(["push"], cwd=repo)
+            else:
+                push = self.run_git(["push", "-u", "origin", branch_name], cwd=repo)
+            lines.append(self.format_result("Push", push))
+
+        self.write_output("\n".join(lines))
 
     def show_github_status(self) -> None:
         repo = self.require_repository()

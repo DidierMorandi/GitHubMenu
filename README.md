@@ -14,6 +14,8 @@ Its goal is to speak the user's language:
 8. GitHub diagnostics
 9. Advanced tools
 10. Father Claude's documentation
+11. Commit all projects found in `/outils`
+12. Push all projects found in `/outils`
 
 ## Requirements
 
@@ -51,11 +53,13 @@ GitHubMenu helps with GitHub operations:
 - view the version history;
 - open the repository in the browser;
 - read GitHub Actions workflows;
-- diagnose common problems.
+- diagnose common problems;
+- commit all Git projects found in `/outils`;
+- push all Git projects found in `/outils`.
 
 ## Documentation
 
-Menu 9 opens Father Claude's documentation.
+Menu 10 opens Father Claude's documentation.
 
 Two French manuals are planned:
 
@@ -64,9 +68,9 @@ Two French manuals are planned:
 
 The `gh_User_Guide_en.html` and `gh_Reference_Manual_en.html` files remain available as initial technical documentation.
 
-## Update - 14 June 2026
+## Update - 16 June 2026
 
-The current code reports `APP_VERSION = "v1.0-6"` in `GitHubMenu.py`.
+The current code reports `APP_VERSION = "v1.0-7"` in `GitHubMenu.py`.
 
 New and confirmed behavior:
 
@@ -78,4 +82,5 @@ New and confirmed behavior:
 - Release history and GitHub Actions workflow display.
 - GitHub diagnostic view combining status, releases, workflows, and likely problems.
 - Advanced tools: `gh auth status`, `gh repo sync`, Actions secrets list, `gh` configuration, and official documentation.
+- Batch commit and batch push for Git projects found in `/outils`.
 - Local documentation is now available in French and English for GitHubMenu and `gh`.
